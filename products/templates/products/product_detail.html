@@ -1,15 +1,18 @@
+{% extends "base.html" %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>{% block title %}Product Detail{% endblock %}</title>
   </head>
   <body>
+    {% block content %}
     <h1>{{ product.name }}</h1>
     <p>Category: {{ product.category.name }}</p>
     <p>Brand: {{ product.brand.name }}</p>
     <p>Price: {{ product.price }}$</p>
     <p>{{ product.description }}</p>
+    {% endblock %}
   </body>
 </html>
