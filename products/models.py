@@ -21,7 +21,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
-    image = models.ImageField(upload_to='products/static/products/images', blank=True, null=True)
+    image = models.ImageField(upload_to='static/products/images', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -43,6 +43,8 @@ class Review(models.Model):
     rating = models.PositiveIntegerField(default=5)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='static/products/images/reviews', blank=True, null=True)
+
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
