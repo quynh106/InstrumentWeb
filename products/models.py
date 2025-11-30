@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Avg
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -20,11 +21,21 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField(default=0)
-    image = models.ImageField(upload_to='products/static/pproducts/images', blank=True, null=True)
+    image = models.ImageField(upload_to='products/static/products/images', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+    
+    def get_filtered_products(search='', category_id=None, brand_id=None):
+        qs = Product.objects.all()
+        if search:
+            qs = qs.filter(name__icontains=search)
+        if category_id:
+            qs = qs.filter(category_id=category_id)
+        if brand_id:
+            qs = qs.filter(brand_id=brand_id)
+        return qs.annotate(average_rating=Avg('reviews__rating'))
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')

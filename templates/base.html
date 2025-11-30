@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Music Store</title>
+    <title>{% block title %}Music Store{% endblock %}</title>
 
     <!-- Bootstrap 5 CDN -->
     <link
@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-lg bg-light border-bottom">
       <div class="container">
         <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="#">🎵 MusicStore</a>
+        <a class="navbar-brand fw-bold" href="#">🎵 InstrumentStore</a>
 
         <!-- Toggle Btn -->
         <button
@@ -44,7 +44,9 @@
           <!-- LEFT -->
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="#">Products</a>
+              <a class="nav-link" href="{% url 'products:product_list' %}"
+                >Products</a
+              >
             </li>
 
             <!-- Categories -->
@@ -58,11 +60,15 @@
                 Categories
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Guitars</a></li>
-                <li><a class="dropdown-item" href="#">Pianos</a></li>
-                <li><a class="dropdown-item" href="#">Drums</a></li>
-                <li><a class="dropdown-item" href="#">Microphones</a></li>
-                <li><a class="dropdown-item" href="#">Audio Equipment</a></li>
+                {% for category in categories %}
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="?brand={{ brand_id }}&q={{ search_query }}&category={{ category.id }}"
+                    >{{ category.name }}</a
+                  >
+                </li>
+                {% endfor %}
               </ul>
             </li>
 
@@ -77,11 +83,15 @@
                 Brands
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Yamaha</a></li>
-                <li><a class="dropdown-item" href="#">Fender</a></li>
-                <li><a class="dropdown-item" href="#">Gibson</a></li>
-                <li><a class="dropdown-item" href="#">Roland</a></li>
-                <li><a class="dropdown-item" href="#">Casio</a></li>
+                {% for brand in brands %}
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="?brand={{ brand.id }}&q={{ search_query }}&category={{ category_id }}"
+                    >{{ brand.name }}</a
+                  >
+                </li>
+                {% endfor %}
               </ul>
             </li>
 
@@ -92,13 +102,17 @@
           </ul>
 
           <!-- SEARCH BAR -->
-          <form class="d-flex me-3" role="search">
+          <form class="d-flex me-3" role="search" method="get">
             <input
               class="form-control"
               type="search"
               placeholder="Search instruments..."
               aria-label="Search"
+              value="{{ search_query }}"
+              name="q"
             />
+            <input type="hidden" name="category" value="{{ category_id }}" />
+            <input type="hidden" name="brand" value="{{ brand_id }}" />
             <button class="btn btn-outline-primary ms-2" type="submit">
               <i class="bi bi-search"></i>
             </button>
