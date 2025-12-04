@@ -245,6 +245,34 @@
       {% endif %}
     </div>
 
+    <hr />
+    <h3 class="fw-bold">Related Products</h3>
+
+    <div class="row row-cols-2 row-cols-md-4 g-3 my-3">
+      {% for p in related_products %}
+      <div class="col">
+        <a
+          href="{% url 'products:product_detail' p.pk %}"
+          class="text-decoration-none text-dark"
+        >
+          <div class="card border-0 shadow-sm h-100">
+            <img
+              src=""
+              class="card-img-top"
+              style="height: 150px; object-fit: cover"
+            />
+            <div class="card-body p-2">
+              <h6 class="text-truncate">{{ p.name }}</h6>
+              <p class="fw-bold text-primary">${{ p.price }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <p>No related products.</p>
+      {% endfor %}
+    </div>
+
     <!-- Quantity Logic -->
     <script>
       function changeQty(val) {
