@@ -1,0 +1,26 @@
+{% load static %}
+<div class="list-group">
+    <a href="{% url 'adminpanel:admin_dashboard' %}" class="list-group-item list-group-item-action {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}">
+        Bảng Điều Khiển
+    </a>
+    <div class="list-group-item list-group-item-secondary">QUẢN LÝ SẢN PHẨM</div>
+    <a href="{% url 'adminpanel:product_list' %}" class="list-group-item list-group-item-action {% if 'product' in request.resolver_match.url_name %}active{% endif %}">
+        Sản phẩm
+    </a>
+    <a href="{% url 'adminpanel:category_list' %}" class="list-group-item list-group-item-action {% if 'category' in request.resolver_match.url_name %}active{% endif %}">
+        Danh mục
+    </a>
+    <a href="{% url 'adminpanel:brand_list' %}" class="list-group-item list-group-item-action {% if 'brand' in request.resolver_match.url_name %}active{% endif %}">
+        Hãng
+    </a>
+    <div class="list-group-item list-group-item-secondary">QUẢN LÝ KHÁC</div>
+    <a href="{% url 'adminpanel:order_list' %}" class="list-group-item list-group-item-action {% if 'order' in request.resolver_match.url_name %}active{% endif %}">
+        Đơn hàng
+    </a>
+    <a href="{% url 'adminpanel:user_management' %}" class="list-group-item list-group-item-action {% if 'user' in request.resolver_match.url_name %}active{% endif %}">
+        Tài khoản
+    </a>
+    <a href="{% url 'admin:index' %}" class="list-group-item list-group-item-action text-danger">
+        Admin Site Mặc Định
+    </a>
+</div>

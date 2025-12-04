@@ -1,0 +1,33 @@
+{% extends "adminpanel/base_admin.html" %}
+{% load static %}
+
+{% block title %}Thêm Sản phẩm Mới{% endblock %}
+
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <h2>Thêm Sản phẩm Mới</h2>
+    <div class="row g-4">
+        <div class="col-sm-12 col-xl-8">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Thông tin Sản phẩm</h6>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary">Thêm Sản phẩm</button>
+                    <a href="{% url 'adminpanel:product_list' %}" class="btn btn-secondary">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

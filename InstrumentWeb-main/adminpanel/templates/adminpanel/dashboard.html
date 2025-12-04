@@ -1,0 +1,129 @@
+{% extends "adminpanel/base_admin.html" %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">
+        <i class="bi bi-speedometer2"></i> {{ title }}
+    </h1>
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+        <i class="bi bi-download"></i> Tải báo cáo
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-start border-success border-4 shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-success text-uppercase mb-1">
+                            Doanh thu Tháng này
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">
+                            {{ monthly_revenue|floatformat:0 }} VNĐ
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-currency-dollar fs-3 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-start border-warning border-4 shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-warning text-uppercase mb-1">
+                            Đơn hàng Chờ xử lý
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">
+                            {{ pending_orders }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-receipt fs-3 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-start border-info border-4 shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-info text-uppercase mb-1">
+                            Tổng tồn kho (Sản phẩm)
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">
+                            {{ total_stock }}
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-box-seam fs-3 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-start border-secondary border-4 shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs fw-bold text-secondary text-uppercase mb-1">
+                            Tổng Doanh thu (Đã hoàn thành)
+                        </div>
+                        <div class="h5 mb-0 fw-bold text-gray-800">
+                            {{ total_revenue|floatformat:0 }} VNĐ
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="bi bi-cash-stack fs-3 text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 fw-bold text-primary">Biểu đồ Doanh thu 7 ngày qua</h6>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 fw-bold text-primary">Top 5 Sản phẩm bán chạy</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    {% for item in top_selling_items %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ item.product__name }}
+                        <span class="badge bg-primary rounded-pill">{{ item.total_quantity }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-muted">Chưa có dữ liệu bán hàng.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

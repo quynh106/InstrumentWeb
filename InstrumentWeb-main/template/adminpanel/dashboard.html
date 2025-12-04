@@ -1,0 +1,143 @@
+{% extends "adminpanel/base_admin.html" %}
+
+{% block title %}Dashboard Quản Trị{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mt-4">🚀 Dashboard Quản Trị</h1>
+    <p class="lead text-muted">Tổng quan nhanh về hoạt động của cửa hàng.</p>
+
+    <div class="row mb-4">
+        
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-primary text-white shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3"><i class="bi bi-currency-dollar fs-1"></i></div>
+                        <div class="col-9 text-end">
+                            <div class="text-uppercase small">Tổng Doanh Thu (T.Này)</div>
+                            <div class="h3 fw-bold">$12,500.00</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white text-decoration-none" href="#">Xem chi tiết doanh thu</a>
+                    <div class="small text-white"><i class="bi bi-arrow-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-warning text-dark shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3"><i class="bi bi-receipt fs-1"></i></div>
+                        <div class="col-9 text-end">
+                            <div class="text-uppercase small">Đơn Hàng Mới (24h)</div>
+                            <div class="h3 fw-bold">45</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-dark text-decoration-none" href="{% url 'order_list' %}">Xem tất cả đơn hàng</a>
+                    <div class="small text-dark"><i class="bi bi-arrow-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-danger text-white shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3"><i class="bi bi-box-seam fs-1"></i></div>
+                        <div class="col-9 text-end">
+                            <div class="text-uppercase small">Tồn Kho Thấp</div>
+                            <div class="h3 fw-bold">12</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white text-decoration-none" href="{% url 'product_list' %}">Quản lý sản phẩm</a>
+                    <div class="small text-white"><i class="bi bi-arrow-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card bg-success text-white shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-3"><i class="bi bi-people fs-1"></i></div>
+                        <div class="col-9 text-end">
+                            <div class="text-uppercase small">Người Dùng Mới (T.Này)</div>
+                            <div class="h3 fw-bold">189</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white text-decoration-none" href="{% url 'user_management' %}">Quản lý người dùng</a>
+                    <div class="small text-white"><i class="bi bi-arrow-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card mb-4 shadow">
+                <div class="card-header"><i class="bi bi-graph-up me-1"></i> Biểu đồ Doanh thu 7 ngày qua</div>
+                <div class="card-body"><canvas id="myAreaChart" height="300"></canvas></div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+             <div class="card mb-4 shadow">
+                <div class="card-header"><i class="bi bi-pie-chart-fill me-1"></i> Phân loại Đơn hàng</div>
+                <div class="card-body"><canvas id="myPieChart" height="200"></canvas></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    // Code Chart.js mẫu
+    document.addEventListener('DOMContentLoaded', event => {
+        // Biểu đồ cột (Area Chart)
+        var ctxArea = document.getElementById("myAreaChart");
+        if (ctxArea) {
+            new Chart(ctxArea, {
+                type: 'line',
+                data: {
+                    labels: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
+                    datasets: [{
+                        label: "Doanh thu",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(13, 110, 253, 0.2)",
+                        borderColor: "rgba(13, 110, 253, 1)",
+                        pointRadius: 5,
+                        pointBackgroundColor: "rgba(13, 110, 253, 1)",
+                        data: [1000, 1500, 900, 2200, 1800, 2500, 3000],
+                    }],
+                },
+            });
+        }
+        
+        // Biểu đồ tròn (Pie Chart)
+        var ctxPie = document.getElementById("myPieChart");
+        if (ctxPie) {
+            new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: ["Đã hoàn thành", "Đang xử lý", "Đã hủy"],
+                    datasets: [{
+                        data: [60, 30, 10],
+                        backgroundColor: ['#198754', '#ffc107', '#dc3545'],
+                    }],
+                },
+            });
+        }
+    });
+</script>
+{% endblock scripts %}

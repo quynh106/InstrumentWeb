@@ -1,0 +1,61 @@
+{% extends "adminpanel/base_admin.html" %}
+{% load static %}
+
+{% block title %}
+    {% if product %}Sửa Sản phẩm: {{ product.name }}{% else %}Thêm Sản phẩm Mới{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mt-4">
+        {% if product %}✏️ Sửa Sản phẩm: {{ product.name }}{% else %}➕ Thêm Sản phẩm Mới{% endif %}
+    </h1>
+    <p class="lead text-muted">
+        {% if product %}Chỉnh sửa thông tin chi tiết cho sản phẩm ID: {{ product.id }}.{% else %}Điền thông tin để tạo sản phẩm mới.{% endif %}
+    </p>
+
+    <div class="card shadow mb-4">
+        <div class="card-header bg-primary text-white">
+            Chi tiết Sản phẩm
+        </div>
+        <div class="card-body">
+            <form method="POST" enctype="multipart/form-data"> 
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Vui lòng sửa các lỗi sau:
+                        <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ field|title }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger p-1 mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                
+                <hr>
+
+                <button type="submit" class="btn btn-success me-2">
+                    {% if product %}Cập Nhật Sản Phẩm{% else %}Lưu Sản Phẩm{% endif %}
+                </button>
+                <a href="{% url 'product_list' %}" class="btn btn-secondary">Hủy</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends "adminpanel/base_admin.html" %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-megaphone"></i> {{ title }}</h1>
+    <a href="{% url 'adminpanel:brand_add' %}" class="btn btn-primary shadow-sm">
+        <i class="bi bi-plus-lg"></i> Thêm Hãng
+    </a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 fw-bold text-primary">Danh sách Hãng/Thương hiệu</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên Hãng</th>
+                        <th>Mô tả (Ví dụ)</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brand in brands %}
+                    <tr>
+                        <td>{{ brand.id }}</td>
+                        <td>{{ brand.name }}</td>
+                        <td>[Mô tả của Hãng]</td> 
+                        <td>
+                            <a href="{% url 'adminpanel:brand_edit' brand.id %}" class="btn btn-sm btn-info me-2" title="Chỉnh sửa">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'adminpanel:brand_delete' brand.id %}" class="btn btn-sm btn-danger" title="Xóa">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">Chưa có hãng nào.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

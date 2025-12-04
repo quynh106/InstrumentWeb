@@ -1,0 +1,74 @@
+{% extends "adminpanel/base_admin.html" %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-person-gear"></i> {{ title }}</h1>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 fw-bold text-primary">Thông tin cơ bản</h6>
+    </div>
+    <div class="card-body">
+        <p><strong>Username:</strong> {{ user_to_edit.username }}</p>
+        <p><strong>Ngày tham gia:</strong> {{ user_to_edit.date_joined|date:"d/m/Y" }}</p>
+        <hr>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    Vui lòng sửa các lỗi sau khi cập nhật:
+                    <ul>
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.first_name.label }}</label>
+                    {{ form.first_name }}
+                    <div class="text-danger small">{{ form.first_name.errors }}</div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">{{ form.last_name.label }}</label>
+                    {{ form.last_name }}
+                    <div class="text-danger small">{{ form.last_name.errors }}</div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">{{ form.email.label }}</label>
+                {{ form.email }}
+                <div class="text-danger small">{{ form.email.errors }}</div>
+            </div>
+
+            <hr>
+            <h6>Trạng thái & Quyền hạn</h6>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="form-check form-switch">
+                        {{ form.is_active }}
+                        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }} (Có thể đăng nhập)</label>
+                        <div class="text-danger small">{{ form.is_active.errors }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="form-check form-switch">
+                        {{ form.is_staff }}
+                        <label class="form-check-label" for="{{ form.is_staff.id_for_label }}">{{ form.is_staff.label }} (Có quyền truy cập Admin)</label>
+                        <div class="text-danger small">{{ form.is_staff.errors }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary me-2 mt-3">Lưu Thay đổi</button>
+            <a href="{% url 'adminpanel:user_management' %}" class="btn btn-secondary mt-3">Quay lại</a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

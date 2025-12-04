@@ -1,0 +1,70 @@
+{% extends "adminpanel/base_admin.html" %}
+
+{% block content %}
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-receipt-cutoff"></i> {{ title }}</h1>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 fw-bold text-primary">Danh sách Đơn hàng</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Khách hàng</th>
+                        <th>Ngày đặt</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.user.get_full_name|default:order.user.username }}</td>
+                        <td>{{ order.created_at|date:"d/m/Y H:i" }}</td>
+                        <td>{{ order.total_amount|floatformat:0 }} VNĐ</td>
+                        <td>
+                            {% if order.status == 'Pending' %}
+                                <span class="badge bg-warning">Chờ xác nhận</span>
+                            {% elif order.status == 'Confirmed' %}
+                                <span class="badge bg-primary">Đã xác nhận</span>
+                            {% elif order.status == 'Shipping' %}
+                                <span class="badge bg-info">Đang giao hàng</span>
+                            {% elif order.status == 'Completed' %}
+                                <span class="badge bg-success">Đã hoàn thành</span>
+                            {% else %}
+                                <span class="badge bg-danger">Đã hủy</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'adminpanel:order_detail' order.id %}" class="btn btn-sm btn-primary" title="Chi tiết/Cập nhật">
+                                <i class="bi bi-eye"></i> Xem & Sửa
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">Không có đơn hàng nào.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

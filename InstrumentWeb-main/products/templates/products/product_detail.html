@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load humanize %} {% block title %}{{ product.name }} | InstrumentStore{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="max-height: 500px; object-fit: contain; padding: 15px;">
+            {% else %}
+                <img src="https://via.placeholder.com/500?text=No+Image" class="card-img-top" alt="No image available" style="max-height: 500px; object-fit: contain; padding: 15px;">
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <h1>{{ product.name }}</h1>
+        <p class="text-muted">{{ product.category.name|default:"Chưa phân loại" }} / {{ product.brand.name|default:"Không rõ hãng" }}</p>
+        
+        <h2 class="text-danger fw-bold my-4">{{ product.price|intcomma }} VND</h2>
+        
+        <p class="lead">{{ product.description|linebreaksbr }}</p>
+        
+        <hr>
+        
+        <div class="mb-3">
+            {% if product.stock > 0 %}
+                <span class="badge bg-success fs-6"><i class="bi bi-check-circle-fill"></i> Còn hàng ({{ product.stock }})</span>
+            {% else %}
+                <span class="badge bg-danger fs-6"><i class="bi bi-x-circle-fill"></i> Hết hàng</span>
+            {% endif %}
+        </div>
+
+        <div class="d-grid gap-2">
+            {% if product.stock > 0 %}
+                <button class="btn btn-success btn-lg"><i class="bi bi-bag-plus-fill"></i> Thêm vào Giỏ hàng</button>
+            {% else %}
+                <button class="btn btn-secondary btn-lg" disabled>Hết hàng</button>
+            {% endif %}
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
