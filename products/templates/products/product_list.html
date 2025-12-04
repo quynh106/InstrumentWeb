@@ -72,6 +72,36 @@
       </div>
     </div>
 
+    <!-- filter price -->
+    <div class="dropdown">
+      <button
+        class="btn btn-outline-primary dropdown-toggle"
+        data-bs-toggle="dropdown"
+      >
+        Sort price
+      </button>
+
+      <ul class="dropdown-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            href="?sort=price_asc&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}"
+          >
+            Price: Low → High
+          </a>
+        </li>
+
+        <li>
+          <a
+            class="dropdown-item"
+            href="?sort=price_desc&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}"
+          >
+            Price: High → Low
+          </a>
+        </li>
+      </ul>
+    </div>
+
     <!-- list product -->
     <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
       {% for product in products %}
