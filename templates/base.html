@@ -64,7 +64,7 @@
                 <li>
                   <a
                     class="dropdown-item"
-                    href="?brand={{ brand_id }}&q={{ search_query }}&category={{ category.id }}"
+                    href="{% url 'products:product_list' %}?brand={{ brand_id }}&q={{ search_query }}&category={{ category.id }}"
                     >{{ category.name }}</a
                   >
                 </li>
@@ -87,22 +87,22 @@
                 <li>
                   <a
                     class="dropdown-item"
-                    href="?brand={{ brand.id }}&q={{ search_query }}&category={{ category_id }}"
+                    href="{% url 'products:product_list' %}?brand={{ brand.id }}&q={{ search_query }}&category={{ category_id }}"
                     >{{ brand.name }}</a
                   >
                 </li>
                 {% endfor %}
               </ul>
             </li>
-
-            <!-- Reviews -->
-            <li class="nav-item">
-              <a class="nav-link" href="#">Reviews</a>
-            </li>
           </ul>
 
           <!-- SEARCH BAR -->
-          <form class="d-flex me-3" role="search" method="get">
+          <form
+            class="d-flex me-3"
+            role="search"
+            method="get"
+            action="{% url 'products:product_list' %}"
+          >
             <input
               class="form-control"
               type="search"
