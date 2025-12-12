@@ -104,8 +104,6 @@
 
         <!-- Demo reviews -->
         <div class="container my-5">
-          <h2 class="mb-4">Customer Reviews</h2>
-
           <!-- Review 1 -->
           <div class="border p-3 mb-3">
             <h5 class="mb-1">Emily Johnson</h5>
@@ -194,56 +192,7 @@
           </div>
         </div>
 
-        <!-- Review List -->
-        {% for review in reviews %}
-        <div class="border rounded p-3 mb-3 shadow-sm">
-          <strong>{{ review.user.username }}</strong>
-          <span class="text-warning">⭐ {{ review.rating }}</span>
-          <p class="mb-1">{{ review.comment }}</p>
-          <small class="text-muted"
-            >{{ review.created_at|date:"M d, Y H:i" }}</small
-          >
-        </div>
-        {% empty %}
-        <p>No reviews available.</p>
-        {% endfor %}
-      </div>
-
-      <hr />
-
-      <!-- ADD REVIEW FORM -->
-      <h4>Add a Review</h4>
-
-      {% if user.is_authenticated %}
-      <form method="post">
-        {% csrf_token %}
-
-        <div class="mb-3">
-          <label class="form-label fw-bold">Rating</label>
-          <select name="rating" class="form-select" required>
-            <option value="">Select rating</option>
-            {% for i in "54321" %}
-            <option value="{{ i }}">{{ i }} Stars</option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label class="form-label fw-bold">Comment</label>
-          <textarea
-            name="comment"
-            rows="3"
-            class="form-control"
-            required
-          ></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Submit Review</button>
-      </form>
-      {% else %}
-      <p><a href="/login">Login</a> to submit a review.</p>
-      {% endif %}
-    </div>
+       
 
     <hr />
     <h3 class="fw-bold">Related Products</h3>
