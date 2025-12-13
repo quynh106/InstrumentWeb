@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Product,Category, Brand
+from .models import Product,Category, Brand, Review
+from django.db.models import Avg
+from django.shortcuts import redirect
 
 
 def product_list(request):
@@ -62,6 +64,16 @@ def product_detail(request, pk):
 
     products = Product.get_filtered_products(search_query, category_id, brand_id)
 
+# review
+    reviews = product.reviews.all()
+
+    star = request.GET.get("star")
+    if star and star != "all":
+        reviews = reviews.filter(rating=star)
+
+    average_rating = reviews.aggregate(avg=Avg("rating"))["avg"] or 0
+    total_reviews = reviews.count()
+
     context = {
         'product': product,
         'related_products': related_products,
@@ -71,6 +83,25 @@ def product_detail(request, pk):
         'brand_id': brand_id,
         'categories': Category.objects.all(),
         'brands': Brand.objects.all(),
+        "reviews": reviews,
+        "average_rating": round(average_rating, 1),
+        "total_reviews": total_reviews,
     }
     return render(request, 'products/product_detail.html', context)
 
+def review_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    
+    if request.method == "POST":
+        Review.objects.create(
+        product=product,
+        user=request.user,
+        rating=int(request.POST.get("rating", 5)),
+        comment=request.POST.get("comment"),
+        image=request.FILES.get("image")
+    )
+        return redirect('products:product_detail', product_id)
+
+    return render(request, 'products/review.html', {
+        'product': product
+    })

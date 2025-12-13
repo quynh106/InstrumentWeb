@@ -20,6 +20,34 @@
         width: 100%;
         object-fit: cover; /* giữ ảnh đẹp, không méo */
       }
+
+      /* lớp overlay cho chữ và nhãn */
+      .carousel-caption {
+        position: absolute;
+        bottom: 10px; /* cách đáy ảnh */
+        left: 50%; /* cách trái ảnh */
+        transform: translateX(-50%); /* căn ngang chính xác */
+        color: #fff;
+        background: rgba(0, 0, 0, 0.2); /*  nền mờ để chữ dễ đọc */
+        padding: 10px;
+        border-radius: 5px;
+       
+      }
+
+      /* nhãn new góc trên trái */
+      .carousel-item .badge-new {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: linear-gradient(45deg, #ff6a00, #ee0979); /* gradient đẹp */
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 50px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+        z-index: 10;
+      }
     </style>
     <!-- slider -->
     <div class="container-fluid mt-4 px-0">
@@ -27,29 +55,32 @@
         id="myCarousel"
         class="carousel slide"
         data-bs-ride="carousel"
-        data-bs-interval="2000"
+        data-bs-interval="3000"
       >
         <div class="carousel-inner h-100">
-          <div class="carousel-item active h-100">
-            <img
-              src="https://tse4.mm.bing.net/th/id/OIP.7Xf9pmKAnxh0RinD34RsAAHaEK?pid=Api&P=0&h=180"
-              alt="1"
-            />
-          </div>
+          {% for product in products|slice:":5" %}
+          <div
+            class="carousel-item {% if forloop.first %}active{% endif %} h-100"
+          >
+            <a href="{% url 'products:product_detail' product.pk %}">
+              {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              {% else %}
+              <img
+                src="https://via.placeholder.com/800x400"
+                alt="{{ product.name }}"
+              />
+              {% endif %}
 
-          <div class="carousel-item h-100">
-            <img
-              src="https://tse3.mm.bing.net/th/id/OIP.78YCT-D79ggzL5fyEXdp7wHaEK?pid=Api&P=0&h=180"
-              alt="2"
-            />
-          </div>
+              <span class="badge-new">New</span>
 
-          <div class="carousel-item h-100">
-            <img
-              src="https://tse4.mm.bing.net/th/id/OIP.C9bHbJQF1RFeFLNSr54tZQHaEK?pid=Api&P=0&h=180"
-              alt="3"
-            />
+              <div class="carousel-caption">
+                <h5 class="text-truncate">{{ product.name }}</h5>
+                <p class="fw-bold">${{ product.price|floatformat:2 }}</p>
+              </div>
+            </a>
           </div>
+          {% endfor %}
         </div>
 
         <button

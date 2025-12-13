@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Review{% endblock %} 
+
+{% block content%}
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <div class="container my-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <!-- Product Info -->
+            <div class="d-flex align-items-center mb-4">
+              <img
+                src="{{ product.image.url }}"
+                alt="{{ product.name }}"
+                class="rounded border me-3"
+                style="width: 70px; height: 70px; object-fit: cover"
+              />
+              <h5 class="mb-0 fw-semibold">{{ product.name }}</h5>
+            </div>
+
+            <!-- Rating -->
+            <div class="row align-items-center mb-3">
+              <div class="col-6 fw-medium">Product Quality</div>
+
+              <div class="col-6 text-end">
+                <span class="fs-3 star" data-value="1">&#9733;</span>
+                <span class="fs-3 star" data-value="2">&#9733;</span>
+                <span class="fs-3 star" data-value="3">&#9733;</span>
+                <span class="fs-3 star" data-value="4">&#9733;</span>
+                <span class="fs-3 star" data-value="5">&#9733;</span>
+              </div>
+
+              <input type="hidden" id="ratingValue" name="rating" value="5" />
+            </div>
+
+            <!-- Upload Buttons -->
+            <div class="row mb-3">
+              <div class="col-6">
+                <label class="btn btn-outline-secondary w-100">
+                  📷 Add Image
+                  <input type="file" name="image" accept="image/*" hidden />
+                </label>
+              </div>
+
+              <div class="col-6">
+                <label class="btn btn-outline-secondary w-100">
+                  🎥 Add Video
+                  <input type="file" accept="video/*" hidden />
+                </label>
+              </div>
+            </div>
+
+            <!-- Review Text -->
+            <div class="mb-3">
+              <textarea
+                class="form-control"
+                rows="5"
+                name="comment"
+                placeholder="Write your product review here..."
+              ></textarea>
+            </div>
+
+            <!-- Submit -->
+            <button class="btn btn-primary w-100">Submit Review</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- script chọn sao-->
+<script>
+  const stars = document.querySelectorAll(".star");
+  const ratingInput = document.getElementById("ratingValue");
+
+  // --- Mặc định 5 sao ---
+  const defaultRating = 5;
+  ratingInput.value = defaultRating;
+  stars.forEach((s) => {
+    s.style.cursor = "pointer";
+    s.style.color =
+      s.getAttribute("data-value") <= defaultRating ? "#ffc107" : "#ddd";
+  });
+
+  // --- Click để chọn sao ---
+  stars.forEach((star) => {
+    star.addEventListener("click", () => {
+      const rating = star.getAttribute("data-value");
+      ratingInput.value = rating;
+
+      stars.forEach((s) => {
+        s.style.color =
+          s.getAttribute("data-value") <= rating ? "#ffc107" : "#ddd";
+      });
+    });
+  });
+</script>
+
+{%endblock%}

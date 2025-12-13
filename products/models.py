@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Avg
+
 
 
 
@@ -37,7 +37,7 @@ class Product(models.Model):
             qs = qs.filter(category_id=category_id)
         if brand_id:
             qs = qs.filter(brand_id=brand_id)
-        return qs.annotate(average_rating=Avg('reviews__rating'))
+        return qs
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
