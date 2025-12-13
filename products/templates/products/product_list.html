@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Product List{% endblock %}</title>
+  </head>
+
+  <body>
+    {% block content %}
+    <style>
+      #myCarousel {
+        width: 100%; /* rộng 80% màn hình */
+        height: 40vh; /* cao 40% màn hình */
+      }
+
+      #myCarousel .carousel-item img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover; /* giữ ảnh đẹp, không méo */
+      }
+    </style>
+    <!-- slider -->
+    <div class="container-fluid mt-4 px-0">
+      <div
+        id="myCarousel"
+        class="carousel slide"
+        data-bs-ride="carousel"
+        data-bs-interval="2000"
+      >
+        <div class="carousel-inner h-100">
+          <div class="carousel-item active h-100">
+            <img
+              src="https://tse4.mm.bing.net/th/id/OIP.7Xf9pmKAnxh0RinD34RsAAHaEK?pid=Api&P=0&h=180"
+              alt="1"
+            />
+          </div>
+
+          <div class="carousel-item h-100">
+            <img
+              src="https://tse3.mm.bing.net/th/id/OIP.78YCT-D79ggzL5fyEXdp7wHaEK?pid=Api&P=0&h=180"
+              alt="2"
+            />
+          </div>
+
+          <div class="carousel-item h-100">
+            <img
+              src="https://tse4.mm.bing.net/th/id/OIP.C9bHbJQF1RFeFLNSr54tZQHaEK?pid=Api&P=0&h=180"
+              alt="3"
+            />
+          </div>
+        </div>
+
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#myCarousel"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#myCarousel"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- filter price -->
+    <div class="dropdown">
+      <button
+        class="btn btn-outline-primary dropdown-toggle"
+        data-bs-toggle="dropdown"
+      >
+        Sort price
+      </button>
+
+      <ul class="dropdown-menu">
+        <li>
+          <a
+            class="dropdown-item"
+            href="?sort=price_asc&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}"
+          >
+            Price: Low → High
+          </a>
+        </li>
+
+        <li>
+          <a
+            class="dropdown-item"
+            href="?sort=price_desc&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}"
+          >
+            Price: High → Low
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- list product -->
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+      {% for product in products %}
+      <div class="col">
+        <a
+          href="{% url 'products:product_detail' product.pk %}"
+          class="text-decoration-none text-dark"
+        >
+          <div
+            class="card border-0 shadow-sm h-100 transition ease-in-out hover-shadow p-2"
+            style="transition: 0.25s"
+          >
+            {% if product.image %}
+            <img
+              src="{{ product.image.url }}"
+              class="card-img-top"
+              style="height: 170px; object-fit: cover"
+              alt="{{ product.name }}"
+            />
+            {% else %}
+            <img
+              src="https://via.placeholder.com/300x200"
+              class="card-img-top"
+              style="height: 170px; object-fit: cover"
+              alt="{{ product.name }}"
+            />
+            {% endif %}
+
+            <div class="card-body p-2">
+              <h6 class="card-title text-truncate">{{ product.name }}</h6>
+              <p class="mb-1 fw-bold text-primary">
+                ${{ product.price|floatformat:2 }}
+              </p>
+              <p class="small text-muted mb-0">
+                ⭐ {{ product.reviews.all|length|default:0 }} reviews
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% empty %}
+      <p>No products available.</p>
+      {% endfor %}
+    </div>
+    {% endblock %}
+  </body>
+</html>
