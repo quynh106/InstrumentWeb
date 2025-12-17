@@ -1,0 +1,90 @@
+{% extends 'adminpanel/base_admin.html' %}
+
+{% block title %}Update Stock - {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Update Stock</h1>
+    <a href="{% url 'adminpanel:inventory_list' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Back to Inventory
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Product Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ product.name }}</p>
+                <p><strong>Category:</strong> {{ product.category.name }}</p>
+                <p><strong>Brand:</strong> {{ product.brand.name }}</p>
+                <p><strong>Price:</strong> ${{ product.price|floatformat:2 }}</p>
+                <p class="mb-0"><strong>Current Stock:</strong>
+                    {% if product.stock < 10 %}
+                        <span class="badge bg-danger">{{ product.stock }}</span>
+                    {% elif product.stock < 20 %}
+                        <span class="badge bg-warning text-dark">{{ product.stock }}</span>
+                    {% else %}
+                        <span class="badge bg-success">{{ product.stock }}</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Update Stock</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Action</label>
+                        <select name="action" class="form-select" id="actionSelect">
+                            <option value="add">Add Stock</option>
+                            <option value="remove">Remove Stock</option>
+                            <option value="adjust">Set Stock to Exact Value</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" name="quantity" class="form-control" min="0" required>
+                        <small class="text-muted">Enter the quantity to add, remove, or set</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Notes (Optional)</label>
+                        <textarea name="notes" class="form-control" rows="3" placeholder="Reason for stock change..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-save"></i> Update Stock
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Optional: Add client-side validation or dynamic help text
+    document.getElementById('actionSelect').addEventListener('change', function() {
+        const helpText = document.querySelector('.text-muted');
+        const action = this.value;
+
+        if (action === 'add') {
+            helpText.textContent = 'Enter the quantity to add to current stock';
+        } else if (action === 'remove') {
+            helpText.textContent = 'Enter the quantity to remove from current stock';
+        } else {
+            helpText.textContent = 'Enter the exact stock value to set';
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'adminpanel/base_admin.html' %}
+
+{% block title %}Statistics{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Statistics & Reports</h1>
+
+<!-- ORDER STATISTICS -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Order Statistics by Status</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Count</th>
+                        <th>Total Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in order_stats %}
+                    <tr>
+                        <td>
+                            {% if stat.status == 'pending' %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif stat.status == 'paid' %}
+                                <span class="badge bg-info">Paid</span>
+                            {% elif stat.status == 'shipped' %}
+                                <span class="badge bg-primary">Shipped</span>
+                            {% elif stat.status == 'completed' %}
+                                <span class="badge bg-success">Completed</span>
+                            {% else %}
+                                <span class="badge bg-danger">Cancelled</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ stat.count }}</td>
+                        <td>${{ stat.total_revenue|floatformat:2|default:"0.00" }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No data available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- CATEGORY STATISTICS -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Statistics by Category</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Product Count</th>
+                        <th>Total Sold</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in category_stats %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.product_count }}</td>
+                        <td>{{ category.total_sold|default:0 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No categories available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- BRAND STATISTICS -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Statistics by Brand</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Brand</th>
+                        <th>Product Count</th>
+                        <th>Total Sold</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for brand in brand_stats %}
+                    <tr>
+                        <td>{{ brand.name }}</td>
+                        <td>{{ brand.product_count }}</td>
+                        <td>{{ brand.total_sold|default:0 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No brands available</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
