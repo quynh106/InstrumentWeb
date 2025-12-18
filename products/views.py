@@ -54,7 +54,11 @@ def product_detail(request, pk):
     search_query = request.GET.get('q', '')
     category_id = request.GET.get('category')
     brand_id = request.GET.get('brand')
-
+    
+    return render(request, 'products/product_detail.html', {
+        'product': product,
+        'related_products': related_products
+    })
 
     # filter
     sort_by = request.GET.get('sort')
