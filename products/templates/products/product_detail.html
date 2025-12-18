@@ -93,14 +93,25 @@
       </div>
 
       <!-- Star Filter Buttons -->
-      <div class="btn-group">
-        <a href="?star=all" class="btn btn-outline-primary btn-sm">All</a>
-        <a href="?star=5" class="btn btn-outline-primary btn-sm">5 Stars</a>
-        <a href="?star=4" class="btn btn-outline-primary btn-sm">4 Stars</a>
-        <a href="?star=3" class="btn btn-outline-primary btn-sm">3 Stars</a>
-        <a href="?star=2" class="btn btn-outline-primary btn-sm">2 Stars</a>
-        <a href="?star=1" class="btn btn-outline-primary btn-sm">1 Star</a>
+      {% with current_star=request.GET.star %}
+      <div class="btn-group mb-3" role="group">
+        <a
+          href="?star=all"
+          class="btn btn-sm {% if not current_star or current_star == 'all' %} btn-primary{% else %}btn-outline-primary{% endif %}"
+        >
+          All ({{ total_reviews }})
+        </a>
+
+        {% for item in star_filters %}
+        <a
+          href="?star={{ item.star }}"
+          class="btn btn-sm {% if current_star == item.star|stringformat:'s' %} btn-primary{% else %}btn-outline-primary{% endif %}"
+        >
+          {{ item.star }} ⭐ ({{ item.count }})
+        </a>
+        {% endfor %}
       </div>
+      {% endwith %}
     </div>
 
     <!--  reviews -->
@@ -114,15 +125,14 @@
 
         <!-- Rating -->
         <div class="text-warning mb-2">
-          {% for i in "12345"|make_list %}
-            {% if forloop.counter <= review.rating %}
-              ★
-            {% else %}
-              ☆
+          {% for i in "12345"|make_list %} 
+          {% if forloop.counter <= review.rating %}
+           ★
+            {% else %} 
+            ☆ 
             {% endif %}
-          {% endfor %}
+             {% endfor %}
         </div>
-        
 
         <p class="mb-2">{{ review.comment }}</p>
 
