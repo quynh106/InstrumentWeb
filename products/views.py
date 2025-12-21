@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product,Category, Brand, Review
 from django.db.models import Avg, Count
 from django.shortcuts import redirect
+from django.http import JsonResponse
 
 
 def product_list(request):
@@ -94,6 +95,18 @@ def product_detail(request, pk):
     average_rating = all_reviews.aggregate(avg=Avg("rating"))["avg"] or 0
     total_reviews = all_reviews.count()
 
+     # ⭐⭐ NẾU LÀ AJAX → trả JSON
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        data = []
+        for r in reviews:
+            data.append({
+                "user": r.user.username,
+                "rating": r.rating,
+                "comment": r.comment,
+                "date": r.created_at.strftime("%Y-%m-%d"),
+                "image": r.image.url if r.image else None,
+            })
+        return JsonResponse({"reviews": data})
 
     context = {
         'product': product,

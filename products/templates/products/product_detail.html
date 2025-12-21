@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block title %}{{ product.name }}{% endblock %}
+{% extends "base.html" %} 
+{% block title %}{{ product.name }}{% endblock %}
 {%block content %}
 <div class="container my-4">
   <!-- PRODUCT TOP SECTION -->
@@ -95,27 +96,25 @@
       <!-- Star Filter Buttons -->
       {% with current_star=request.GET.star %}
       <div class="btn-group mb-3" role="group">
-        <a
-          href="?star=all"
-          class="btn btn-sm {% if not current_star or current_star == 'all' %} btn-primary{% else %}btn-outline-primary{% endif %}"
-        >
-          All ({{ total_reviews }})
-        </a>
-
+        <button class="btn btn-sm btn-outline-primary star-btn" data-star="all">
+          All
+        </button>
+      
         {% for item in star_filters %}
-        <a
-          href="?star={{ item.star }}"
-          class="btn btn-sm {% if current_star == item.star|stringformat:'s' %} btn-primary{% else %}btn-outline-primary{% endif %}"
+        <button
+          class="btn btn-sm btn-outline-primary star-btn"
+          data-star="{{ item.star }}"
         >
           {{ item.star }} ⭐ ({{ item.count }})
-        </a>
+        </button>
         {% endfor %}
       </div>
+      
       {% endwith %}
     </div>
 
     <!--  reviews -->
-    <div class="container my-5">
+    <div class="container my-5" id="review-list">
       {% for review in reviews %}
       <div class="border p-3 mb-3">
         <h5 class="mb-1">{{ review.user.username }}</h5>
@@ -197,5 +196,60 @@
     </script>
   </div>
 </div>
+
+<!-- scrip for filter star -->
+<script>
+  document.querySelectorAll(".star-btn").forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const star = this.dataset.star;
+      const url = new URL(window.location.href);
+
+      // thêm / đổi param star
+      if (star === "all") {
+        url.searchParams.delete("star");
+      } else {
+        url.searchParams.set("star", star);
+      }
+
+      fetch(url, {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          const reviewList = document.getElementById("review-list");
+          reviewList.innerHTML = "";
+
+          if (data.reviews.length === 0) {
+            reviewList.innerHTML =
+              '<p class="text-muted">No reviews yet.</p>';
+            return;
+          }
+
+          data.reviews.forEach((r) => {
+            let stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+
+            reviewList.innerHTML += `
+              <div class="border p-3 mb-3">
+                <h5 class="mb-1">${r.user}</h5>
+                <small class="text-muted">Reviewed on ${r.date}</small>
+
+                <div class="text-warning mb-2">${stars}</div>
+
+                <p class="mb-2">${r.comment}</p>
+
+                ${
+                  r.image
+                    ? `<img src="${r.image}" class="img-thumbnail" style="width:120px">`
+                    : ""
+                }
+              </div>
+            `;
+          });
+        });
+    });
+  });
+</script>
 
 {% endblock %}
