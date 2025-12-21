@@ -167,9 +167,21 @@
               <p class="mb-1 fw-bold text-primary">
                 ${{ product.price|floatformat:2 }}
               </p>
-              <p class="small text-muted mb-0">
-                ⭐ {{ product.reviews.all|length|default:0 }} reviews
-              </p>
+              <div class="d-flex align-items-center small">
+                <span>
+                  {% if product.avg_rating %}
+                    {{ product.avg_rating|floatformat:1 }} ⭐
+                  {% else %}
+                    ⭐
+                  {% endif %}
+                </span>
+              
+                <span class="ms-auto text-muted">
+                  {{ product.reviews.all|length|default:0 }} reviews
+                </span>
+              </div>
+              
+              
             </div>
           </div>
         </a>

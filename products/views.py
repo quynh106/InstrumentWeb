@@ -21,7 +21,11 @@ def product_list(request):
     if brand_id in ('', 'None'):
         brand_id = None
 
-    products = Product.get_filtered_products(search_query, category_id, brand_id)
+    products = (
+    Product.get_filtered_products(search_query, category_id, brand_id)
+    .annotate(avg_rating=Avg("reviews__rating"))
+)
+
 
     # APPLY SORTING
     if sort_by == "price_asc":
