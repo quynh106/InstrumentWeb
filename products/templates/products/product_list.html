@@ -1,54 +1,15 @@
 {% extends "base.html" %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Product List{% endblock %}</title>
-  </head>
+{% load static %}
 
-  <body>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'products/css/product.css' %}">
+{% endblock %}
+
+{% block title %}Product List{% endblock %}
+
+  
     {% block content %}
-    <style>
-      #myCarousel {
-        width: 100%; /* rộng 80% màn hình */
-        height: 40vh; /* cao 40% màn hình */
-      }
-
-      #myCarousel .carousel-item img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover; /* giữ ảnh đẹp, không méo */
-      }
-
-      /* lớp overlay cho chữ và nhãn */
-      .carousel-caption {
-        position: absolute;
-        bottom: 10px; /* cách đáy ảnh */
-        left: 50%; /* cách trái ảnh */
-        transform: translateX(-50%); /* căn ngang chính xác */
-        color: #fff;
-        background: rgba(0, 0, 0, 0.2); /*  nền mờ để chữ dễ đọc */
-        padding: 10px;
-        border-radius: 5px;
-       
-      }
-
-      /* nhãn new góc trên trái */
-      .carousel-item .badge-new {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        background: linear-gradient(45deg, #ff6a00, #ee0979); /* gradient đẹp */
-        color: #fff;
-        padding: 6px 12px;
-        border-radius: 50px;
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
-        z-index: 10;
-      }
-    </style>
+    
     <!-- slider -->
     <div class="container-fluid mt-4 px-0">
       <div
@@ -191,5 +152,4 @@
       {% endfor %}
     </div>
     {% endblock %}
-  </body>
-</html>
+ 

@@ -38,6 +38,19 @@ class Product(models.Model):
         if brand_id:
             qs = qs.filter(brand_id=brand_id)
         return qs
+    
+class ProductImage(models.Model):
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+    image = models.ImageField(upload_to="products/images/")
+    is_main = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.product.name} image"
+
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
@@ -45,9 +58,16 @@ class Review(models.Model):
     rating = models.PositiveIntegerField(default=5)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(upload_to='products/reviews/', blank=True, null=True)
+    
     is_hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
 
+class ReviewImage(models.Model):
+    review = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+    image = models.ImageField(upload_to="products/reviews/")

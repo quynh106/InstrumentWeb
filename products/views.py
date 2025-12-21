@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Product,Category, Brand, Review
+from .models import Product,Category, Brand, Review,ReviewImage
 from django.db.models import Avg, Count
 from django.shortcuts import redirect
 from django.http import JsonResponse
@@ -53,6 +53,7 @@ def product_list(request):
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
+    product_images = product.images.all()
 
     related_products = Product.objects.filter(
         category=product.category
@@ -101,7 +102,8 @@ def product_detail(request, pk):
                 "rating": r.rating,
                 "comment": r.comment,
                 "date": r.created_at.strftime("%Y-%m-%d"),
-                "image": r.image.url if r.image else None,
+                "images": [img.image.url for img in r.images.all()],
+
             })
         return JsonResponse({"reviews": data})
 
@@ -112,6 +114,7 @@ def product_detail(request, pk):
         "average_rating": round(average_rating, 1),
         "total_reviews": total_reviews,
         "star_filters": star_filters,
+        "product_images": product_images,
     })
 
 
@@ -122,22 +125,6 @@ BAD_WORDS = [      #Rule-based dùng để bắt toxic rõ ràng, nhanh và chí
 ]
 
 
-# def review_product(request, product_id):
-#     product = get_object_or_404(Product, id=product_id)
-    
-#     if request.method == "POST":
-#         Review.objects.create(
-#         product=product,
-#         user=request.user,
-#         rating=int(request.POST.get("rating", 5)),
-#         comment=request.POST.get("comment"),
-#         image=request.FILES.get("image")
-#     )
-#         return redirect('products:product_detail', product_id)
-
-#     return render(request, 'products/review.html', {
-#         'product': product
-#     })
 
 @login_required
 def review_product(request, product_id):
@@ -160,14 +147,21 @@ def review_product(request, product_id):
         elif is_negative_comment(comment):
             is_hidden = True
 
-        Review.objects.create(
+        review = Review.objects.create(
             product=product,
             user=request.user,
-            rating=rating,      # ⭐ sao giữ nguyên
+            rating=rating,
             comment=comment,
-            image=request.FILES.get("image"),
             is_hidden=is_hidden
         )
+
+        
+
+        for img in request.FILES.getlist("images"):
+            ReviewImage.objects.create(
+                review=review,
+                image=img
+            )
 
         return redirect('products:product_detail', product_id)
 

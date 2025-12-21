@@ -47,11 +47,19 @@
             </div>
 
             <!-- Upload Buttons -->
+            <input
+            type="file"
+            id="imagesInput"
+            name="images"
+            accept="image/*"
+            multiple
+            hidden
+          />
             <div class="row mb-3">
               <div class="col-6">
-                <label class="btn btn-outline-secondary w-100">
+                <label for="imagesInput" class="btn btn-outline-secondary w-100">
                   📷 Add Image
-                  <input type="file" name="image" accept="image/*" hidden />
+                  
                 </label>
               </div>
 
@@ -62,6 +70,9 @@
                 </label>
               </div>
             </div>
+
+            <!-- Preview container -->
+<div id="preview" class="d-flex flex-wrap gap-2 mt-2"></div>
 
             <!-- Review Text -->
             <div class="mb-3">
@@ -110,4 +121,67 @@
   });
 </script>
 
+<!-- preview ảnh đã chọn review,Chọn nhiều lần & Xóa ảnh -->
+<script>
+  const input = document.getElementById("imagesInput");
+  const preview = document.getElementById("preview");
+  
+  // Mảng lưu các file đã chọn
+  let selectedFiles = [];
+  
+  // Hàm hiển thị preview
+  function renderPreview() {
+    preview.innerHTML = "";
+    selectedFiles.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const wrapper = document.createElement("div");
+        wrapper.style.position = "relative";
+        wrapper.style.display = "inline-block";
+  
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.style.width = "100px";
+        img.style.height = "100px";
+        img.style.objectFit = "cover";
+        img.className = "img-thumbnail";
+  
+        // Nút xóa
+        const removeBtn = document.createElement("button");
+        removeBtn.innerHTML = "&times;";
+        removeBtn.style.position = "absolute";
+        removeBtn.style.top = "0";
+        removeBtn.style.right = "0";
+        removeBtn.style.border = "none";
+        removeBtn.style.background = "rgba(255,255,255,0.8)";
+        removeBtn.style.cursor = "pointer";
+        removeBtn.style.fontSize = "16px";
+        removeBtn.onclick = () => {
+          selectedFiles.splice(index, 1); // xóa file khỏi mảng
+          renderPreview();
+        };
+  
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        preview.appendChild(wrapper);
+      }
+      reader.readAsDataURL(file);
+    });
+  }
+  
+  // Khi chọn file mới
+  input.addEventListener("change", function () {
+    selectedFiles = selectedFiles.concat(Array.from(this.files)); // thêm file mới
+    renderPreview();
+  });
+  
+  // Thêm mảng file vào form trước submit
+  const form = input.closest("form");
+  form.addEventListener("submit", function(e) {
+    const dataTransfer = new DataTransfer();
+    selectedFiles.forEach(file => dataTransfer.items.add(file));
+    input.files = dataTransfer.files; // ghi lại vào input
+  });
+  </script>
+  
 {%endblock%}
