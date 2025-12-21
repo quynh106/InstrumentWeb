@@ -45,61 +45,40 @@ def product_list(request):
 
 
 def product_detail(request, pk):
-    
     product = get_object_or_404(Product, pk=pk)
 
     related_products = Product.objects.filter(
         category=product.category
     ).exclude(pk=product.pk)[:6]
 
-    search_query = request.GET.get('q', '')
-    category_id = request.GET.get('category')
-    brand_id = request.GET.get('brand')
-    
-    return render(request, 'products/product_detail.html', {
-        'product': product,
-        'related_products': related_products
-    })
+    # ===== REVIEWS =====
+    all_reviews = Review.objects.filter(product=product).select_related("user")
 
-    # filter
-    sort_by = request.GET.get('sort')
-
-    if category_id in ('', 'None'):
-        category_id = None
-    if brand_id in ('', 'None'):
-        brand_id = None
-
-    products = Product.get_filtered_products(search_query, category_id, brand_id)
-
-# review
-    all_reviews = product.reviews.all()
-
-# Đếm số review mỗi sao
-    rating_counts = (
-        all_reviews.values("rating").annotate(count=Count("id"))
-)
-
-    # Tạo list 5 → 1 (KHÔNG cần get_item)
-    star_filters = []
-    counts_map = {item["rating"]: item["count"] for item in rating_counts}
-
-    for i in range(5, 0, -1):
-        star_filters.append({
-        "star": i,
-        "count": counts_map.get(i, 0)
-    })
-
-# Lọc review để hiển thị
-    reviews = all_reviews
+    # filter theo sao
     star = request.GET.get("star")
+    reviews = all_reviews
     if star and star != "all":
-        reviews = reviews.filter(rating=star)
+        reviews = reviews.filter(rating=int(star))
 
-# Trung bình & tổng
+    # average & total
     average_rating = all_reviews.aggregate(avg=Avg("rating"))["avg"] or 0
     total_reviews = all_reviews.count()
 
-     # ⭐⭐ NẾU LÀ AJAX → trả JSON
+    # đếm số review mỗi sao
+    rating_counts = (
+        all_reviews.values("rating")
+        .annotate(count=Count("id"))
+    )
+    counts_map = {item["rating"]: item["count"] for item in rating_counts}
+
+    star_filters = []
+    for i in range(5, 0, -1):
+        star_filters.append({
+            "star": i,
+            "count": counts_map.get(i, 0)
+        })
+
+    # ===== AJAX FILTER =====
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         data = []
         for r in reviews:
@@ -112,21 +91,15 @@ def product_detail(request, pk):
             })
         return JsonResponse({"reviews": data})
 
-    context = {
-        'product': product,
-        'related_products': related_products,
-        'products': products,
-        'search_query': search_query,
-        'category_id': category_id,
-        'brand_id': brand_id,
-        'categories': Category.objects.all(),
-        'brands': Brand.objects.all(),
+    return render(request, "products/product_detail.html", {
+        "product": product,
+        "related_products": related_products,
         "reviews": reviews,
         "average_rating": round(average_rating, 1),
         "total_reviews": total_reviews,
         "star_filters": star_filters,
-    }
-    return render(request, 'products/product_detail.html', context)
+    })
+
 
 
 
