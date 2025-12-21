@@ -455,6 +455,19 @@
   }
 },
 {
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2025-12-21T13:50:18.701Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "20",
+    "object_repr": "Quynh - Fender Stratocaster Standard",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
@@ -1839,4 +1852,97 @@
     "product": 21,
     "user": 1,
     "rating": 5,
-    "comment": 
+    "comment": "giao hàng đúng",
+    "created_at": "2025-12-21T05:57:40.394Z",
+    "is_hidden": false
+  }
+},
+{
+  "model": "products.review",
+  "pk": 4,
+  "fields": {
+    "product": 17,
+    "user": 1,
+    "rating": 3,
+    "comment": "Giao hàng hơi chậm nhưng đàn ổn",
+    "created_at": "2025-12-21T07:38:29.563Z",
+    "is_hidden": false
+  }
+},
+{
+  "model": "products.review",
+  "pk": 6,
+  "fields": {
+    "product": 17,
+    "user": 1,
+    "rating": 5,
+    "comment": "Đàn rất hay, âm tốt",
+    "created_at": "2025-12-21T07:39:16.155Z",
+    "is_hidden": false
+  }
+},
+{
+  "model": "products.review",
+  "pk": 8,
+  "fields": {
+    "product": 17,
+    "user": 1,
+    "rating": 1,
+    "comment": "Âm thanh dở, hoàn thiện kém, quá tệ",
+    "created_at": "2025-12-21T07:59:44.405Z",
+    "is_hidden": true
+  }
+},
+{
+  "model": "products.review",
+  "pk": 9,
+  "fields": {
+    "product": 17,
+    "user": 1,
+    "rating": 2,
+    "comment": "Mua về thất vọng, lừa đảo",
+    "created_at": "2025-12-21T08:00:14.248Z",
+    "is_hidden": true
+  }
+},
+{
+  "model": "products.review",
+  "pk": 15,
+  "fields": {
+    "product": 16,
+    "user": 1,
+    "rating": 5,
+    "comment": "hàng ok",
+    "created_at": "2025-12-21T11:20:40.403Z",
+    "is_hidden": false
+  }
+},
+{
+  "model": "products.review",
+  "pk": 19,
+  "fields": {
+    "product": 16,
+    "user": 1,
+    "rating": 2,
+    "comment": "sản phẩm bể, không hài lòng",
+    "created_at": "2025-12-21T13:48:57.095Z",
+    "is_hidden": true
+  }
+},
+{
+  "model": "products.reviewimage",
+  "pk": 7,
+  "fields": {
+    "review": 15,
+    "image": "products/reviews/OIP_1_dh01j6r.jpg"
+  }
+},
+{
+  "model": "products.reviewimage",
+  "pk": 8,
+  "fields": {
+    "review": 15,
+    "image": "products/reviews/OIP_NBsbL5U.jpg"
+  }
+}
+]

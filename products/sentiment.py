@@ -1,18 +1,30 @@
 from transformers import pipeline
 
-# Load model sentiment tiếng Việt
-sentiment_analyzer = pipeline(
-    "sentiment-analysis",
-    model="wonrax/phobert-base-vietnamese-sentiment"   #Sử dụng mô hình PhoBERT pretrained cho tiếng Việt
-)
+_sentiment_analyzer = None  # cache model
+
+def get_sentiment_analyzer():
+    global _sentiment_analyzer
+    if _sentiment_analyzer is None:
+        _sentiment_analyzer = pipeline(
+            "sentiment-analysis",
+            model="wonrax/phobert-base-vietnamese-sentiment"  #Sử dụng mô hình PhoBERT pretrained cho tiếng Việt
+        )
+    return _sentiment_analyzer
+
 
 def is_negative_comment(text: str) -> bool:
-    if not text or not text.strip():  #tiền xử lý: Tránh AI phân tích chuỗi trống, tránh lỗi.
+    if not text or not text.strip():    #tiền xử lý: Tránh AI phân tích chuỗi trống, tránh lỗi.
         return False
 
-    result = sentiment_analyzer(text[:256])[0]   #Cắt độ dài text để tối ưu hiệu năng
+    analyzer = get_sentiment_analyzer()
+    result = analyzer(text[:256])[0]    #Cắt độ dài text để tối ưu hiệu năng
+
     label = result["label"].upper()
     score = result["score"]
 
-    # Chỉ coi là tiêu cực khi NEG + độ tin cậy cao
+ # Chỉ coi là tiêu cực khi NEG + độ tin cậy cao
     return label == "NEG" and score > 0.8
+
+
+
+
