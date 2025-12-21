@@ -4,6 +4,9 @@ from django.db.models import Avg, Count
 from django.shortcuts import redirect
 from django.http import JsonResponse
 
+from .sentiment import is_negative_comment
+from django.contrib.auth.decorators import login_required
+
 
 def product_list(request):
     search_query = request.GET.get('q', '')
@@ -52,11 +55,18 @@ def product_detail(request, pk):
     ).exclude(pk=product.pk)[:6]
 
     # ===== REVIEWS =====
-    all_reviews = Review.objects.filter(product=product).select_related("user")
+    all_reviews = Review.objects.filter(
+    product=product
+).select_related("user") #tối ưu query, tránh N+1
+
+    visible_reviews = all_reviews.filter(is_hidden=False) #chỉ lấy review không bị AI + rule ẩn
+
+    
+
 
     # filter theo sao
     star = request.GET.get("star")
-    reviews = all_reviews
+    reviews = visible_reviews
     if star and star != "all":
         reviews = reviews.filter(rating=int(star))
 
@@ -102,19 +112,59 @@ def product_detail(request, pk):
 
 
 
+BAD_WORDS = [      #Rule-based dùng để bắt toxic rõ ràng, nhanh và chính xác.
+    "lừa đảo", "rác", "tệ", "chán", "dở",
+    "vcl", "đm", "shit", "không đáng tiền"
+]
 
 
+# def review_product(request, product_id):
+#     product = get_object_or_404(Product, id=product_id)
+    
+#     if request.method == "POST":
+#         Review.objects.create(
+#         product=product,
+#         user=request.user,
+#         rating=int(request.POST.get("rating", 5)),
+#         comment=request.POST.get("comment"),
+#         image=request.FILES.get("image")
+#     )
+#         return redirect('products:product_detail', product_id)
+
+#     return render(request, 'products/review.html', {
+#         'product': product
+#     })
+
+@login_required
 def review_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    
+
     if request.method == "POST":
+        comment = request.POST.get("comment", "").strip()
+        rating = int(request.POST.get("rating", 5))
+        rating = max(1, min(rating, 5))
+
+        # =====  RULE + AI  để ẩn comment tiêu cực =====
+        is_hidden = False
+
+        # Tầng 1: Rule-based
+        lower_comment = comment.lower()
+        if any(word in lower_comment for word in BAD_WORDS):
+            is_hidden = True
+
+        # Tầng 2: AI sentiment
+        elif is_negative_comment(comment):
+            is_hidden = True
+
         Review.objects.create(
-        product=product,
-        user=request.user,
-        rating=int(request.POST.get("rating", 5)),
-        comment=request.POST.get("comment"),
-        image=request.FILES.get("image")
-    )
+            product=product,
+            user=request.user,
+            rating=rating,      # ⭐ sao giữ nguyên
+            comment=comment,
+            image=request.FILES.get("image"),
+            is_hidden=is_hidden
+        )
+
         return redirect('products:product_detail', product_id)
 
     return render(request, 'products/review.html', {

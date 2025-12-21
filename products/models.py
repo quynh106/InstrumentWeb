@@ -46,7 +46,7 @@ class Review(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='products/reviews/', blank=True, null=True)
-
+    is_hidden = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"
