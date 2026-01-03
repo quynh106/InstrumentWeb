@@ -1,54 +1,43 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Cart, CartItem, Order, OrderItem
-from product.models import Product
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib import messages
 
-# Xem giỏ hàng (GET)
-@login_required
-def view_cart(request):
-    cart, created = Cart.objects.get_or_create(user=request.user)
-    items = cart.items.all()
-    return render(request, 'cart.html', {'cart': cart, 'items': items})
+# 1. Chức năng Đăng ký
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()  # Lưu người dùng mới vào Database
+            login(request, user) # Đăng ký xong tự động đăng nhập luôn cho tiện
+            messages.success(request, f'Tài khoản {user.username} đã được tạo thành công!')
+            return redirect('home') # Chuyển hướng về trang chủ (hoặc trang bạn muốn)
+    else:
+        form = UserCreationForm()
+    return render(request, 'users/register.html', {'form': form})
 
-# Thêm sản phẩm vào giỏ (POST)
-@login_required
-def add_to_cart(request, product_id):
-    if request.method == "POST":
-        cart, created = Cart.objects.get_or_create(user=request.user)
-        product = get_object_or_404(Product, id=product_id)
-        item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-        item.quantity += 1
-        item.save()
-    return redirect('view_cart')
+# 2. Chức năng Đăng nhập
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"Bạn đã đăng nhập bằng tên {username}.")
+                return redirect('home')
+            else:
+                messages.error(request, "Sai tên đăng nhập hoặc mật khẩu.")
+        else:
+            messages.error(request, "Thông tin đăng nhập không hợp lệ.")
+    else:
+        form = AuthenticationForm()
+    return render(request, 'users/login.html', {'form': form})
 
-# Xóa sản phẩm khỏi giỏ (POST)
-@login_required
-def remove_from_cart(request, item_id):
-    if request.method == "POST":
-        item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
-        item.delete()
-    return redirect('view_cart')
-
-# Checkout - tạo đơn hàng (POST)
-@login_required
-def create_order(request):
-    if request.method == "POST":
-        cart = get_object_or_404(Cart, user=request.user)
-        total = sum(i.product.price * i.quantity for i in cart.items.all())
-        order = Order.objects.create(user=request.user, total_price=total)
-        for item in cart.items.all():
-            OrderItem.objects.create(
-                order=order,
-                product=item.product,
-                quantity=item.quantity,
-                price_at_time=item.product.price
-            )
-        cart.items.all().delete()  # xóa giỏ hàng sau khi đặt
-    return redirect('order_history')
-
-# Xem lịch sử đơn hàng (GET)
-@login_required
-def order_history(request):
-    orders = Order.objects.filter(user=request.user)
-    return render(request, 'orders.html', {'orders': orders})
-
+# 3. Chức năng Đăng xuất
+def logout_view(request):
+    logout(request)
+    messages.info(request, "Bạn đã đăng xuất thành công.")
+    return redirect('login')
