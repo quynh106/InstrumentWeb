@@ -22,7 +22,7 @@ def is_negative_comment(text: str) -> bool:
     label = result["label"].upper()
     score = result["score"]
 
- # Chỉ coi là tiêu cực khi NEG + độ tin cậy cao
+ # Chỉ coi là tiêu cực khi NEG + độ tin cậy của dự đoán cao
     return label == "NEG" and score > 0.8
 
 
