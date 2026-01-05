@@ -1,329 +1,437 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load static %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'products/css/product.css' %}">
+<style>
+/* Star Filter Styles */
+.give-review ul li {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+}
+
+.give-review ul li:hover {
+    background-color: #f5f5f5;
+}
+
+.give-review ul li.active {
+    background-color: #0167F3;
+    color: white !important;
+}
+
+.give-review ul li.active span,
+.give-review ul li.active i {
+    color: white !important;
+}
+
+.give-review ul li span {
+    color: #666;
+}
+
+.give-review ul li i {
+    color: #ffa000;
+}
+</style>
 {% endblock %}
 
-{% block title %}{{ product.name }}{% endblock %}
-{%block content %}
-<div class="container my-4">
-  <!-- PRODUCT TOP SECTION -->
-  <div class="row">
-    <!-- LEFT IMAGE -->
-    <div class="col-md-6">
-      {% if product.image %}
-      <!-- Main image -->
-      <div class="border rounded p-2 mb-3 text-center">
-        <img
-          id="mainImage"
-          src="{{ product.image.url }}"
-          class="img-fluid rounded"
-          style="max-height: 420px; object-fit: contain;"
-          alt="{{ product.name }}"
-        />
-      </div>
-    
-      <!-- Thumbnails -->
-<div class="d-flex gap-2">
+{% block title %}{{ product.name }} - InstrumentStore{% endblock %}
 
-  <!-- Thumbnail của ảnh MAIN -->
-  <img
-    src="{{ product.image.url }}"
-    class="thumb border rounded active"
-    style="width:70px;height:70px;object-fit:cover;cursor:pointer"
-    data-src="{{ product.image.url }}"
-  />
-
-  <!-- Thumbnail ảnh phụ -->
-  {% for img in product_images %}
-  <img
-    src="{{ img.image.url }}"
-    class="thumb border rounded"
-    style="width:70px;height:70px;object-fit:cover;cursor:pointer"
-    data-src="{{ img.image.url }}"
-  />
-  {% endfor %}
-</div>
-
-    
-      {% else %}
-      <img
-        src="https://via.placeholder.com/600x450"
-        class="img-fluid rounded shadow-sm"
-        alt="{{ product.name }}"
-      />
-      {% endif %}
-    </div>
-    
-
-    <!-- RIGHT DETAILS -->
-    <div class="col-md-6">
-      <h2 class="fw-bold">{{ product.name }}</h2>
-
-      <!-- Rating -->
-      <p class="mb-1">
-        <span class="fw-bold fs-5">⭐ {{ average_rating }} / 5</span>
-        <span class="text-muted">({{ total_reviews }} reviews)</span>
-      </p>
-
-      <!-- Price -->
-      <p class="text-primary fw-bold fs-3">
-        ${{ product.price|floatformat:2 }}
-      </p>
-
-      <!-- Quantity Selector -->
-      <div class="d-flex align-items-center mb-3">
-        <button class="btn btn-outline-secondary" onclick="changeQty(-1)">
-          −
-        </button>
-        <input
-          id="qtyInput"
-          type="number"
-          class="form-control mx-2"
-          value="1"
-          min="1"
-          style="width: 70px"
-        />
-        <button class="btn btn-outline-secondary" onclick="changeQty(1)">
-          +
-        </button>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="d-flex gap-2">
-        <a href="#" class="btn btn-success px-4">Add to Cart</a>
-        <a href="#" class="btn btn-warning px-4">Buy Now</a>
-      </div>
-
-      <!-- Stock -->
-      <p class="mt-3 text-muted">Stock: {{ product.stock }}</p>
-    </div>
-  </div>
-
-  <hr />
-
-  <!-- PRODUCT DESCRIPTION -->
-  <h3>Description</h3>
-  <p>{{ product.description|default:"No description available." }}</p>
-
-  <hr />
-
-  <!-- rate product -->
-
-  <a
-    href="{% url 'products:review_product' product.id %}"
-    class="btn btn-warning my-3 d-inline-block"
-  >
-    <i class="bi bi-star-fill"></i> Rate Product
-  </a>
-
-  <!-- REVIEW SECTION -->
-  <div class="mb-4">
-    <h3 class="fw-bold">Customer Reviews</h3>
-
-    <!-- Average rating + filter -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <div>
-        <span class="fw-bold fs-4">⭐ {{ average_rating }} / 5</span>
-        <span class="text-muted">({{ total_reviews }} reviews)</span>
-      </div>
-
-      <!-- Star Filter Buttons -->
-      {% with current_star=request.GET.star %}
-      <div class="btn-group mb-3" role="group">
-        <button class="btn btn-sm btn-outline-primary star-btn" data-star="all">
-          All
-        </button>
-      
-        {% for item in star_filters %}
-        <button
-          class="btn btn-sm btn-outline-primary star-btn"
-          data-star="{{ item.star }}"
-        >
-          {{ item.star }} ⭐ ({{ item.count }})
-        </button>
-        {% endfor %}
-      </div>
-      
-      {% endwith %}
-    </div>
-
-    <!--  reviews -->
-    <div class="container my-5" id="review-list">
-      {% for review in reviews %}
-      <div class="border p-3 mb-3">
-        <h5 class="mb-1">{{ review.user.username }}</h5>
-        <small class="text-muted">
-          Reviewed on {{ review.created_at|date:"Y-m-d" }}
-        </small>
-
-        <!-- Rating -->
-        <div class="text-warning mb-2">
-          {% for i in "12345"|make_list %} 
-          {% if forloop.counter <= review.rating %}
-           ★
-            {% else %} 
-            ☆ 
-            {% endif %}
-             {% endfor %}
-        </div>
-
-        <p class="mb-2">{{ review.comment }}</p>
-
-        {% if review.images.exists  %}
-<div class="d-flex gap-2">
-  {% for img in review.images.all %}
-  <img
-    src="{{ img.image.url }}"
-    class="img-thumbnail"
-    style="width:100px"
-  />
-  {% endfor %}
-</div>
-{% endif %}
-
-      </div>
-      {% empty %}
-      <p class="text-muted">No reviews yet.</p>
-      {% endfor %}
-    </div>
-
-    <hr />
-    <h3 class="fw-bold">Related Products</h3>
-
-    <div class="row row-cols-2 row-cols-md-4 g-3 my-3">
-      {% for p in related_products %}
-      <div class="col">
-        <a
-          href="{% url 'products:product_detail' p.pk %}"
-          class="text-decoration-none text-dark"
-        >
-          <div class="card border-0 shadow-sm h-100">
-            {% if p.image %}
-            <img
-              src="{{ p.image.url }}"
-              class="card-img-top"
-              style="height: 150px; object-fit: cover"
-            />
-            {% else %}
-            <img
-              src="https://via.placeholder.com/300x200"
-              class="card-img-top"
-              style="height: 150px; object-fit: cover"
-            />
-            {% endif %}
-
-            <div class="card-body p-2">
-              <h6 class="text-truncate">{{ p.name }}</h6>
-              <p class="fw-bold text-primary">${{ p.price }}</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      {% empty %}
-      <p>No related products.</p>
-      {% endfor %}
-    </div>
-
-    <!-- Quantity Logic -->
-    <script>
-      function changeQty(val) {
-        let qty = document.getElementById("qtyInput");
-        let newVal = parseInt(qty.value) + val;
-        if (newVal >= 1) qty.value = newVal;
-      }
-    </script>
-  </div>
-</div>
-
-<!-- scrip for filter star -->
-<script>
-  document.querySelectorAll(".star-btn").forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const star = this.dataset.star;
-      const url = new URL(window.location.href);
-
-      // thêm / đổi param star
-      if (star === "all") {
-        url.searchParams.delete("star");
-      } else {
-        url.searchParams.set("star", star);
-      }
-
-      fetch(url, {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          const reviewList = document.getElementById("review-list");
-          reviewList.innerHTML = "";
-
-          if (data.reviews.length === 0) {
-            reviewList.innerHTML =
-              '<p class="text-muted">No reviews yet.</p>';
-            return;
-          }
-
-          data.reviews.forEach((r) => {
-            let stars = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
-
-            // ✅ RENDER NHIỀU ẢNH
-            let imagesHtml = "";
-            if (r.images && r.images.length > 0) {
-              imagesHtml = `
-                <div class="d-flex gap-2 mt-2">
-                  ${r.images
-                    .map(
-                      (img) =>
-                        `<img src="${img}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover">`
-                    )
-                    .join("")}
+{% block breadcrumbs %}
+<!-- Start Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6 col-12">
+                <div class="breadcrumbs-content">
+                    <h1 class="page-title">Single Product</h1>
                 </div>
-              `;
-            }
+            </div>
+            <div class="col-lg-6 col-md-6 col-12">
+                <ul class="breadcrumb-nav">
+                    <li><a href="{% url 'products:home' %}"><i class="lni lni-home"></i> Home</a></li>
+                    <li><a href="{% url 'products:product_list' %}">Shop</a></li>
+                    <li>{{ product.name }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Breadcrumbs -->
+{% endblock %}
 
-            reviewList.innerHTML += `
-              <div class="border p-3 mb-3">
-                <h5 class="mb-1">${r.user}</h5>
-                <small class="text-muted">Reviewed on ${r.date}</small>
+{% block content %}
+<!-- Start Item Details -->
+<section class="item-details section">
+    <div class="container">
+        <div class="top-area">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-12 col-12">
+                    <div class="product-images">
+                        <main id="gallery">
+                            <div class="main-img">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" id="current" alt="{{ product.name }}">
+                                {% else %}
+                                <img src="https://via.placeholder.com/600x600" id="current" alt="{{ product.name }}">
+                                {% endif %}
+                            </div>
+                            <div class="images">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" class="img" alt="{{ product.name }}">
+                                {% endif %}
+                                
+                                {% for img in product_images %}
+                                <img src="{{ img.image.url }}" class="img" alt="{{ product.name }}">
+                                {% endfor %}
+                            </div>
+                        </main>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12 col-12">
+                    <div class="product-info">
+                        <h2 class="title">{{ product.name }}</h2>
+                        <p class="category"><i class="lni lni-tag"></i> Category:<a href="{% url 'products:product_list' %}?category={{ product.category.id }}">{{ product.category.name }}</a></p>
+                        <h3 class="price">${{ product.price|floatformat:2 }}</h3>
+                        <p class="info-text">{{ product.description|default:"No description available." }}</p>
+                        <div class="row">
+                          <div class="col-lg-4 col-md-4 col-12">
+                            <div class="form-group quantity">
+                                <label for="quantity">Quantity</label>
+                                <div class="inner-content">
+                                    <input class="button first" type="button" value="-" onclick="decreaseQuantity()">
+                                    <input class="text" type="number" id="quantity" value="1" min="1">
+                                    <input class="button last" type="button" value="+" onclick="increaseQuantity()">
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="bottom-content">
+                            <div class="row align-items-end">
+                                <div class="col-lg-4 col-md-4 col-12">
+                                  <div class="button cart-button">
+                                    <button class="btn btn-add-cart" style="width: 100%;">
+                                        <i class="lni lni-cart"></i> Add to Cart
+                                    </button>
+                                </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-12">
+                                  <div class="button cart-button">
+                                    <button class="btn btn-buy-now" style="width: 100%;">
+                                        Buy Now
+                                    </button>
+                                </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-12">
+                                    <div class="wish-button">
+                                        <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="product-details-info">
+            <div class="single-block">
+                <div class="row">
+                    <div class="col-lg-6 col-12">
+                        <div class="info-body custom-responsive-margin">
+                            <h4>Details</h4>
+                            <p>{{ product.description|default:"No description available." }}</p>
+                            <h4>Specifications</h4>
+                            <ul class="normal-list">
+                                <li><span>Brand:</span> {% if product.brand %}{{ product.brand.name }}{% else %}N/A{% endif %}</li>
+                                <li><span>Category:</span> {{ product.category.name }}</li>
+                                <li><span>Stock:</span> {{ product.stock }}</li>
+                                <li><span>SKU:</span> #{{ product.id }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="info-body">
+                            <h4>Customer Reviews</h4>
+                            <div class="rating-main">
+                                <ul class="rating">
+                                    {% for i in "12345"|make_list %}
+                                        {% if forloop.counter <= average_rating|default:0 %}
+                                        <li><i class="lni lni-star-filled"></i></li>
+                                        {% else %}
+                                        <li><i class="lni lni-star"></i></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                                <span class="average">{{ average_rating|floatformat:1 }} out of 5 ({{ total_reviews }} reviews)</span>
+                            </div>
+                            
+                            <a href="{% url 'products:review_product' product.id %}" class="btn mt-3">
+                                <i class="lni lni-star"></i> Write a Review
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reviews Section -->
+            <div class="row">
+                <div class="col-lg-4 col-12">
+                    <div class="single-block give-review">
+                        <h4>{{ average_rating|floatformat:1 }} (Overall)</h4>
+                        <ul id="star-filters">
+                            <!-- All Reviews -->
+                            <li class="star-filter active" data-star="all">
+                                <span>All ({{ total_reviews }})</span>
+                            </li>
+                            
+                            <!-- 5 Stars -->
+                            {% for filter in star_filters %}
+                            <li class="star-filter" data-star="{{ filter.star }}">
+                                <span>{{ filter.star }} stars ({{ filter.count }})</span>
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= filter.star %}
+                                    <i class="lni lni-star-filled"></i>
+                                    {% else %}
+                                    <i class="lni lni-star"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        
+                        <a href="{% url 'products:review_product' product.id %}" class="btn review-btn">
+                            Leave a Review
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-8 col-12">
+                    <div class="single-block">
+                        <div class="reviews">
+                            <h4 class="title">Latest Reviews</h4>
+                            
+                            <!-- Reviews Container -->
+                            <div id="reviews-container">
+                                {% for review in reviews %}
+                                <div class="single-review">
+                                    <img src="{% static 'images/default-avatar.jpg' %}" alt="{{ review.user.username }}">
+                                    
+                                    <div class="review-info">
+                                        <h4>
+                                            {{ review.user.username }}
+                                            <span>{{ review.created_at|date:"M d, Y" }}</span>
+                                        </h4>
+                                        
+                                        <ul class="stars">
+                                            {% for i in "12345"|make_list %}
+                                                {% if forloop.counter <= review.rating %}
+                                                    <li><i class="lni lni-star-filled"></i></li>
+                                                {% else %}
+                                                    <li><i class="lni lni-star"></i></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                        
+                                        <p>{{ review.comment }}</p>
+                                        
+                                        {% if review.images.exists %}
+                                        <div class="review-images">
+                                            {% for img in review.images.all %}
+                                                <img src="{{ img.image.url }}" alt="Review image">
+                                            {% endfor %}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Item Details -->
 
-                <div class="text-warning mb-2">${stars}</div>
+<!-- Related Products -->
+{% if related_products %}
+<section class="trending-product section" style="margin-top: 12px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-title">
+                    <h2>Related Products</h2>
+                    <p>Check out these similar products you might like</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for p in related_products %}
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="single-product">
+                    <div class="product-image">
+                        <img src="{% if p.image %}{{ p.image.url }}{% else %}https://via.placeholder.com/300x300{% endif %}" alt="{{ p.name }}">
+                        <div class="button">
+                            <a href="{% url 'products:product_detail' p.pk %}" class="btn"><i class="lni lni-cart"></i> View Details</a>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="category">{{ p.category.name }}</span>
+                        <h4 class="title">
+                            <a href="{% url 'products:product_detail' p.pk %}">{{ p.name }}</a>
+                        </h4>
+                        <ul class="review">
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= p.avg_rating|default:0 %}
+                                <li><i class="lni lni-star-filled"></i></li>
+                                {% else %}
+                                <li><i class="lni lni-star"></i></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <div class="price">
+                            <span>${{ p.price|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
 
-                <p class="mb-2">${r.comment}</p>
-
-                ${imagesHtml}
-              </div>
-            `;
-          });
+{% block extra_js %}
+<script type="text/javascript">
+    // Product Image Gallery
+    const current = document.getElementById("current");
+    const opacity = 0.6;
+    const imgs = document.querySelectorAll(".img");
+    imgs.forEach(img => {
+        img.addEventListener("click", (e) => {
+            imgs.forEach(img => {
+                img.style.opacity = 1;
+            });
+            current.src = e.target.src;
+            e.target.style.opacity = opacity;
         });
     });
-  });
-</script>
 
+    // ===== STAR FILTER WITH AJAX =====
+    document.addEventListener('DOMContentLoaded', function() {
+        const starFilters = document.querySelectorAll('.star-filter');
+        const reviewsContainer = document.getElementById('reviews-container');
+        const productId = {{ product.id }};
 
-<!-- Hover đổi ảnh & GIỮ ảnh khi thả chuột -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const mainImage = document.getElementById("mainImage");
-    const thumbs = document.querySelectorAll(".thumb");
+        starFilters.forEach(filter => {
+            filter.addEventListener('click', function() {
+                // Remove active class from all filters
+                starFilters.forEach(f => f.classList.remove('active'));
+                
+                // Add active class to clicked filter
+                this.classList.add('active');
+                
+                // Get star rating
+                const star = this.dataset.star;
+                
+                // Fetch filtered reviews
+                fetchReviews(star);
+            });
+        });
 
-    thumbs.forEach((thumb) => {
-      thumb.addEventListener("mouseenter", function () {
-        // đổi ảnh chính
-        mainImage.src = this.dataset.src;
+        function fetchReviews(star) {
+            // Show loading
+            reviewsContainer.innerHTML = '<p class="text-center"><i class="lni lni-spinner lni-spin"></i> Loading...</p>';
+            
+            // AJAX request
+            fetch(`{% url 'products:product_detail' product.pk %}?star=${star}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.reviews.length === 0) {
+                    reviewsContainer.innerHTML = '<p class="text-muted">No reviews found for this filter.</p>';
+                    return;
+                }
+                
+                // Build HTML - FIX: Proper structure for CSS
+                let html = '';
+                data.reviews.forEach(review => {
+                    html += `
+                        <div class="single-review">
+                            <img src="{% static 'images/default-avatar.jpg' %}" alt="${review.user}">
+                            
+                            <div class="review-info">
+                                <h4>
+                                    ${review.user}
+                                    <span>${review.date}</span>
+                                </h4>
+                                
+                                <ul class="stars">
+                                    ${generateStars(review.rating)}
+                                </ul>
+                                
+                                <p>${review.comment}</p>
+                    `;
+                    
+                    // Add review images if exists - CRITICAL: Correct structure
+                    if (review.images.length > 0) {
+                        html += '<div class="review-images">';
+                        review.images.forEach(img => {
+                            html += `<img src="${img}" alt="Review image">`;
+                        });
+                        html += '</div>';
+                    }
+                    
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                reviewsContainer.innerHTML = html;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                reviewsContainer.innerHTML = '<p class="text-danger">Error loading reviews. Please try again.</p>';
+            });
+        }
 
-        // bỏ active cũ
-        thumbs.forEach((t) => t.classList.remove("active"));
-
-        // set active mới
-        this.classList.add("active");
-      });
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<li><i class="lni lni-star-filled"></i></li>';
+                } else {
+                    stars += '<li><i class="lni lni-star"></i></li>';
+                }
+            }
+            return stars;
+        }
     });
-  });
 </script>
 
+<!-- quantity -->
+ <script>
+  // Quantity buttons
+function increaseQuantity() {
+    const input = document.getElementById('quantity');
+    input.value = parseInt(input.value) + 1;
+}
 
+function decreaseQuantity() {
+    const input = document.getElementById('quantity');
+    if (parseInt(input.value) > 1) {
+        input.value = parseInt(input.value) - 1;
+    }
+}
+ </script>
 {% endblock %}

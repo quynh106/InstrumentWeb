@@ -1,40 +1,66 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Product,Category, Brand, Review,ReviewImage
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Product, Category, Brand, Review, ReviewImage
 from django.db.models import Avg, Count
-from django.shortcuts import redirect
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 from .sentiment import is_negative_comment
-from django.contrib.auth.decorators import login_required
+
+
+def home(request):
+    # 5 sản phẩm mới nhất cho hero slider
+    new_products = Product.objects.all().order_by('-created_at')[:5]
+    
+    # 8 sản phẩm trending
+    trending_products = Product.objects.all()[:8]
+    
+    # Tính avg_rating
+    for product in trending_products:
+        product.avg_rating = product.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+    
+    context = {
+        'new_products': new_products,
+        'trending_products': trending_products,
+    }
+    
+    return render(request, 'products/home.html', context)
 
 
 def product_list(request):
     search_query = request.GET.get('q', '')
-    category_id = request.GET.get('category')
-    brand_id = request.GET.get('brand')
+    category_id = request.GET.get('category', '')
+    brand_id = request.GET.get('brand', '')
+    sort_by = request.GET.get('sort', '')
+    max_price = request.GET.get('max_price', '')
 
-    # filter
-    sort_by = request.GET.get('sort')
-
+    # Clean up empty values
     if category_id in ('', 'None'):
         category_id = None
     if brand_id in ('', 'None'):
         brand_id = None
 
+    # Get filtered products
     products = (
-    Product.get_filtered_products(search_query, category_id, brand_id)
-    .annotate(avg_rating=Avg("reviews__rating"))
-)
+        Product.get_filtered_products(search_query, category_id, brand_id)
+        .annotate(avg_rating=Avg("reviews__rating"))
+    )
 
+    # Apply price filter
+    if max_price:
+        try:
+            products = products.filter(price__lte=float(max_price))
+        except ValueError:
+            pass
 
-    # APPLY SORTING
+    # Apply sorting
     if sort_by == "price_asc":
         products = products.order_by("price")
     elif sort_by == "price_desc":
         products = products.order_by("-price")
-   
-    # 5 new products
-    new_products = Product.objects.order_by('-created_at')[:5]
+    elif sort_by == "name":
+        products = products.order_by("name")
+    else:
+        products = products.order_by("-created_at")
 
     context = {
         'products': products,
@@ -43,43 +69,47 @@ def product_list(request):
         'brand_id': brand_id,
         'categories': Category.objects.all(),
         'brands': Brand.objects.all(),
-        'new_products': new_products,
     }
+    
     return render(request, 'products/product_list.html', context)
-
-
-
 
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product_images = product.images.all()
 
+    # Related products - 4 sản phẩm
     related_products = Product.objects.filter(
         category=product.category
-    ).exclude(pk=product.pk)[:6]
+    ).exclude(pk=product.pk)[:4]
+    
+    # Tính avg_rating cho related products
+    for p in related_products:
+        p.avg_rating = p.reviews.aggregate(avg=Avg('rating'))['avg'] or 0
 
     # ===== REVIEWS =====
     all_reviews = Review.objects.filter(
-    product=product
-).select_related("user") #tối ưu query, tránh N+1
+        product=product
+    ).select_related("user")
 
-    visible_reviews = all_reviews.filter(is_hidden=False) #chỉ lấy review không bị AI + rule ẩn
+    visible_reviews = all_reviews.filter(is_hidden=False)
 
-    
-
-
-    # filter theo sao
-    star = request.GET.get("star")
+    # Filter theo sao
+    star = request.GET.get("star", "all")
     reviews = visible_reviews
+    
     if star and star != "all":
-        reviews = reviews.filter(rating=int(star))
+        try:
+            star_int = int(star)
+            reviews = reviews.filter(rating=star_int)
+        except ValueError:
+            pass
 
-    # average & total
+    # Average & total
     average_rating = all_reviews.aggregate(avg=Avg("rating"))["avg"] or 0
     total_reviews = all_reviews.count()
 
-    # đếm số review mỗi sao
+    # Đếm số review mỗi sao
     rating_counts = (
         all_reviews.values("rating")
         .annotate(count=Count("id"))
@@ -93,7 +123,7 @@ def product_detail(request, pk):
             "count": counts_map.get(i, 0)
         })
 
-    # ===== AJAX FILTER =====
+    # ===== AJAX REQUEST =====
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         data = []
         for r in reviews:
@@ -101,12 +131,12 @@ def product_detail(request, pk):
                 "user": r.user.username,
                 "rating": r.rating,
                 "comment": r.comment,
-                "date": r.created_at.strftime("%Y-%m-%d"),
+                "date": r.created_at.strftime("%b %d, %Y"),
                 "images": [img.image.url for img in r.images.all()],
-
             })
         return JsonResponse({"reviews": data})
 
+    # ===== NORMAL REQUEST =====
     return render(request, "products/product_detail.html", {
         "product": product,
         "related_products": related_products,
@@ -118,12 +148,10 @@ def product_detail(request, pk):
     })
 
 
-
-BAD_WORDS = [      #Rule-based dùng để bắt toxic rõ ràng, nhanh và chính xác.
+BAD_WORDS = [
     "lừa đảo", "rác", "tệ", "chán", "dở",
     "vcl", "đm", "shit", "không đáng tiền"
 ]
-
 
 
 @login_required
@@ -135,7 +163,7 @@ def review_product(request, product_id):
         rating = int(request.POST.get("rating", 5))
         rating = max(1, min(rating, 5))
 
-        # =====  RULE + AI  để ẩn comment tiêu cực =====
+        # Rule + AI để ẩn comment tiêu cực
         is_hidden = False
 
         # Tầng 1: Rule-based
@@ -155,15 +183,14 @@ def review_product(request, product_id):
             is_hidden=is_hidden
         )
 
-        
-
+        # Save images
         for img in request.FILES.getlist("images"):
             ReviewImage.objects.create(
                 review=review,
                 image=img
             )
 
-        return redirect('products:product_detail', product_id)
+        return redirect('products:product_detail', pk=product_id)  # FIX: pk thay vì product_id
 
     return render(request, 'products/review.html', {
         'product': product

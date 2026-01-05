@@ -1,155 +1,274 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'products/css/product.css' %}">
+{% block title %}Shop - InstrumentStore{% endblock %}
+
+{% block breadcrumbs %}
+<!-- Start Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 col-md-6 col-12">
+                <div class="breadcrumbs-content">
+                    <h1 class="page-title">Shop Grid</h1>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-12">
+                <ul class="breadcrumb-nav">
+                    <li><a href="{% url 'products:home' %}"><i class="lni lni-home"></i> Home</a></li>
+                    <li>Shop</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Breadcrumbs -->
 {% endblock %}
 
-{% block title %}Product List{% endblock %}
-
-  
-    {% block content %}
-    
-    <!-- slider -->
-    <div class="container-fluid mt-4 px-0">
-      <div
-        id="myCarousel"
-        class="carousel slide"
-        data-bs-ride="carousel"
-        data-bs-interval="3000"
-      >
-        <div class="carousel-inner h-100">
-          {% for product in new_products %}
-
-          <div
-            class="carousel-item {% if forloop.first %}active{% endif %} h-100"
-          >
-            <a href="{% url 'products:product_detail' product.pk %}">
-              {% if product.image %}
-              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
-              {% else %}
-              <img
-                src="https://via.placeholder.com/800x400"
-                alt="{{ product.name }}"
-              />
-              {% endif %}
-
-              <span class="badge-new">New</span>
-
-              <div class="carousel-caption">
-                <h5 class="text-truncate">{{ product.name }}</h5>
-                <p class="fw-bold">${{ product.price|floatformat:2 }}</p>
-              </div>
-            </a>
-          </div>
-          {% endfor %}
-        </div>
-
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#myCarousel"
-          data-bs-slide="prev"
-        >
-          <span class="carousel-control-prev-icon"></span>
-        </button>
-
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#myCarousel"
-          data-bs-slide="next"
-        >
-          <span class="carousel-control-next-icon"></span>
-        </button>
-      </div>
-    </div>
-
-    <!-- filter price -->
-    <div class="dropdown">
-      <button
-        class="btn btn-outline-primary dropdown-toggle"
-        data-bs-toggle="dropdown"
-      >
-        Sort price
-      </button>
-
-      <ul class="dropdown-menu">
-        <li>
-          <a
-            class="dropdown-item"
-            href="?sort=price_asc&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}"
-          >
-            Price: Low → High
-          </a>
-        </li>
-
-        <li>
-          <a
-            class="dropdown-item"
-            href="?sort=price_desc&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}"
-          >
-            Price: High → Low
-          </a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- list product -->
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
-      {% for product in products %}
-      <div class="col">
-        <a
-          href="{% url 'products:product_detail' product.pk %}"
-          class="text-decoration-none text-dark"
-        >
-          <div
-            class="card border-0 shadow-sm h-100 transition ease-in-out hover-shadow p-2"
-            style="transition: 0.25s"
-          >
-            {% if product.image %}
-            <img
-              src="{{ product.image.url }}"
-              class="card-img-top"
-              style="height: 170px; object-fit: cover"
-              alt="{{ product.name }}"
-            />
-            {% else %}
-            <img
-              src="https://via.placeholder.com/300x200"
-              class="card-img-top"
-              style="height: 170px; object-fit: cover"
-              alt="{{ product.name }}"
-            />
-            {% endif %}
-
-            <div class="card-body p-2">
-              <h6 class="card-title text-truncate">{{ product.name }}</h6>
-              <p class="mb-1 fw-bold text-primary">
-                ${{ product.price|floatformat:2 }}
-              </p>
-              <div class="d-flex align-items-center small">
-                <span>
-                  {% if product.avg_rating %}
-                    {{ product.avg_rating|floatformat:1 }} ⭐
-                  {% else %}
-                    ⭐
-                  {% endif %}
-                </span>
-              
-                <span class="ms-auto text-muted">
-                  {{ product.reviews.all|length|default:0 }} reviews
-                </span>
-              </div>
-              
-              
+{% block content %}
+<!-- Start Product Grids -->
+<section class="product-grids section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-12">
+                <!-- Start Product Sidebar -->
+                <div class="product-sidebar">
+                    <!-- Start Single Widget -->
+                    <div class="single-widget search">
+                        <h3>Search Product</h3>
+                        <form method="get" action="{% url 'products:product_list' %}">
+                            <input type="text" name="q" placeholder="Search Here..." value="{{ search_query }}">
+                            <input type="hidden" name="category" value="{{ category_id }}">
+                            <input type="hidden" name="brand" value="{{ brand_id }}">
+                            <button type="submit"><i class="lni lni-search-alt"></i></button>
+                        </form>
+                    </div>
+                    <!-- End Single Widget -->
+                    
+                    <!-- Start Single Widget -->
+                    <div class="single-widget">
+                        <h3>All Categories</h3>
+                        <ul class="list">
+                            <li>
+                                <a href="{% url 'products:product_list' %}">All Products</a>
+                                <span>({{ products|length }})</span>
+                            </li>
+                            {% for category in categories %}
+                            <li>
+                                <a href="{% url 'products:product_list' %}?category={{ category.id }}&brand={{ brand_id }}&q={{ search_query }}">
+                                    {{ category.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <!-- End Single Widget -->
+                    
+                    <!-- Start Single Widget -->
+                    <div class="single-widget range">
+                        <h3>Price Range</h3>
+                        <form method="get" action="{% url 'products:product_list' %}">
+                            <input type="range" class="form-range" name="max_price" step="10" min="0" max="10000"
+                                value="{{ request.GET.max_price|default:'10000' }}" onchange="rangePrimary.value=value">
+                            <div class="range-inner">
+                                <label>$</label>
+                                <input type="text" id="rangePrimary" name="max_price_display" placeholder="10000" value="{{ request.GET.max_price|default:'10000' }}" readonly />
+                            </div>
+                            <input type="hidden" name="category" value="{{ category_id }}">
+                            <input type="hidden" name="brand" value="{{ brand_id }}">
+                            <input type="hidden" name="q" value="{{ search_query }}">
+                            <button type="submit" class="btn btn-sm btn-primary mt-2 w-100">Apply</button>
+                        </form>
+                    </div>
+                    <!-- End Single Widget -->
+                    
+                    <!-- Start Single Widget -->
+                    <div class="single-widget condition">
+                        <h3>Filter by Brand</h3>
+                        {% for brand in brands %}
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="{{ brand.id }}" id="brand{{ brand.id }}"
+                                {% if brand.id|stringformat:"s" == brand_id %}checked{% endif %}
+                                onchange="location.href='{% url 'products:product_list' %}?brand={{ brand.id }}&category={{ category_id }}&q={{ search_query }}'">
+                            <label class="form-check-label" for="brand{{ brand.id }}">
+                                {{ brand.name }}
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <!-- End Single Widget -->
+                </div>
+                <!-- End Product Sidebar -->
             </div>
-          </div>
-        </a>
-      </div>
-      {% empty %}
-      <p>No products available.</p>
-      {% endfor %}
+            <div class="col-lg-9 col-12">
+                <div class="product-grids-head">
+                    <div class="product-grid-topbar">
+                        <div class="row align-items-center">
+                            <div class="col-lg-7 col-md-8 col-12">
+                                <div class="product-sorting">
+                                    <label for="sorting">Sort by:</label>
+                                    <select class="form-control" id="sorting" onchange="location.href=this.value;">
+                                        <option value="?category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}">Popularity</option>
+                                        <option value="?sort=price_asc&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}" 
+                                            {% if request.GET.sort == 'price_asc' %}selected{% endif %}>Low - High Price</option>
+                                        <option value="?sort=price_desc&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}" 
+                                            {% if request.GET.sort == 'price_desc' %}selected{% endif %}>High - Low Price</option>
+                                        <option value="?sort=name&category={{ category_id }}&brand={{ brand_id }}&q={{ search_query }}" 
+                                            {% if request.GET.sort == 'name' %}selected{% endif %}>A - Z Order</option>
+                                    </select>
+                                    <h3 class="total-show-product">Showing: <span>1 - {{ products|length }} items</span></h3>
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-4 col-12">
+                                <nav>
+                                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                        <button class="nav-link active" id="nav-grid-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-grid" type="button" role="tab"
+                                            aria-controls="nav-grid" aria-selected="true"><i
+                                                class="lni lni-grid-alt"></i></button>
+                                        <button class="nav-link" id="nav-list-tab" data-bs-toggle="tab"
+                                            data-bs-target="#nav-list" type="button" role="tab"
+                                            aria-controls="nav-list" aria-selected="false"><i
+                                                class="lni lni-list"></i></button>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-grid" role="tabpanel"
+                            aria-labelledby="nav-grid-tab">
+                            <div class="row">
+                                {% for product in products %}
+                                <div class="col-lg-4 col-md-6 col-12">
+                                    <!-- Start Single Product -->
+                                    <div class="single-product">
+                                        <div class="product-image">
+                                            <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/300x300{% endif %}" alt="{{ product.name }}">
+                                            <div class="button">
+                                                <a href="{% url 'products:product_detail' product.pk %}" class="btn"><i
+                                                        class="lni lni-cart"></i> Add to Cart</a>
+                                            </div>
+                                        </div>
+                                        <div class="product-info">
+                                            <span class="category">{{ product.category.name }}</span>
+                                            <h4 class="title">
+                                                <a href="{% url 'products:product_detail' product.pk %}">{{ product.name }}</a>
+                                            </h4>
+                                            <ul class="review">
+                                                {% for i in "12345"|make_list %}
+                                                    {% if forloop.counter <= product.avg_rating|default:0 %}
+                                                    <li><i class="lni lni-star-filled"></i></li>
+                                                    {% else %}
+                                                    <li><i class="lni lni-star"></i></li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <li><span>{{ product.reviews.count|default:0 }} Review(s)</span></li>
+                                            </ul>
+                                            <div class="price">
+                                                <span>${{ product.price|floatformat:2 }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Single Product -->
+                                </div>
+                                {% empty %}
+                                <div class="col-12">
+                                    <p class="text-center">No products found.</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% if products %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <!-- Pagination -->
+                                    <div class="pagination left">
+                                        <ul class="pagination-list">
+                                            <li><a href="javascript:void(0)">1</a></li>
+                                            <li class="active"><a href="javascript:void(0)">2</a></li>
+                                            <li><a href="javascript:void(0)">3</a></li>
+                                            <li><a href="javascript:void(0)">4</a></li>
+                                            <li><a href="javascript:void(0)"><i
+                                                        class="lni lni-chevron-right"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <!--/ End Pagination -->
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane fade" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab">
+                            <div class="row">
+                                {% for product in products %}
+                                <div class="col-lg-12 col-md-12 col-12">
+                                    <!-- Start Single Product -->
+                                    <div class="single-product">
+                                        <div class="row align-items-center">
+                                            <div class="col-lg-4 col-md-4 col-12">
+                                                <div class="product-image">
+                                                    <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/300x300{% endif %}" alt="{{ product.name }}">
+                                                    <div class="button">
+                                                        <a href="{% url 'products:product_detail' product.pk %}" class="btn"><i
+                                                                class="lni lni-cart"></i> Add to
+                                                            Cart</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-8 col-md-8 col-12">
+                                                <div class="product-info">
+                                                    <span class="category">{{ product.category.name }}</span>
+                                                    <h4 class="title">
+                                                        <a href="{% url 'products:product_detail' product.pk %}">{{ product.name }}</a>
+                                                    </h4>
+                                                    <ul class="review">
+                                                        {% for i in "12345"|make_list %}
+                                                            {% if forloop.counter <= product.avg_rating|default:0 %}
+                                                            <li><i class="lni lni-star-filled"></i></li>
+                                                            {% else %}
+                                                            <li><i class="lni lni-star"></i></li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        <li><span>{{ product.reviews.count|default:0 }} Review(s)</span></li>
+                                                    </ul>
+                                                    <div class="price">
+                                                        <span>${{ product.price|floatformat:2 }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Single Product -->
+                                </div>
+                                {% empty %}
+                                <div class="col-12">
+                                    <p class="text-center">No products found.</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% if products %}
+                            <div class="row">
+                                <div class="col-12">
+                                    <!-- Pagination -->
+                                    <div class="pagination left">
+                                        <ul class="pagination-list">
+                                            <li><a href="javascript:void(0)">1</a></li>
+                                            <li class="active"><a href="javascript:void(0)">2</a></li>
+                                            <li><a href="javascript:void(0)">3</a></li>
+                                            <li><a href="javascript:void(0)">4</a></li>
+                                            <li><a href="javascript:void(0)"><i
+                                                        class="lni lni-chevron-right"></i></a></li>
+                                        </ul>
+                                    </div>
+                                    <!--/ End Pagination -->
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {% endblock %}
- 
+</section>
+<!-- End Product Grids -->
+{% endblock %}

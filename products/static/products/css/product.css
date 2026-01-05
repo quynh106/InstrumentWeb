@@ -39,16 +39,95 @@
   }
 
 /* details */
-.thumb {
-    opacity: 0.6;
-    transition: all 0.2s ease;
+
+/* ===== Base style ===== */
+.btn-add-cart {
+  background-color: white;
+  color: #0167F3;
+  border: 2px solid #0167F3;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.btn-buy-now {
+  background-color: #0167F3;
+  color: white;
+  border: 2px solid #0167F3;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ===== Hover ===== */
+
+/* Add to Cart: xanh + chữ trắng */
+.btn-add-cart:hover {
+  background-color: #0167F3;
+  color: white;
+}
+
+/* Buy Now: đen + chữ trắng */
+.btn-buy-now:hover {
+  background-color: #000;
+  color: white;
+}
+
+
+
+/* ========================================
+   REVIEW IMAGES FIX - CRITICAL
+   ======================================== */
+
+/* Avatar của reviewer */
+.product-details-info .reviews .single-review > img {
+  position: absolute !important;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+  left: 0 !important;
+  top: 0 !important;
+  object-fit: cover !important;
+  border: 2px solid #eee !important;
+}
+
+/* Container cho review images */
+.product-details-info .reviews .single-review .review-images {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-top: 15px !important;
+  padding-top: 15px !important;
+  border-top: 1px solid #eee !important;
+}
+
+/* Ảnh review - FORCE OVERRIDE */
+.product-details-info .reviews .single-review .review-images img {
+  position: static !important;
+  width: 100px !important;
+  height: 100px !important;
+  border-radius: 6px !important;
+  object-fit: cover !important;
+  margin: 0 !important;
+  border: 1px solid #ddd !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.product-details-info .reviews .single-review .review-images img:hover {
+  transform: scale(1.05) !important;
+  border-color: #0167F3 !important;
+  box-shadow: 0 4px 12px rgba(1, 103, 243, 0.2) !important;
+}
+
+@media (max-width: 767px) {
+  .product-details-info .reviews .single-review {
+      padding-left: 50px !important;
   }
   
-  .thumb:hover,
-  .thumb.active {
-    opacity: 1;
-    outline: 2px solid #ff6a00;
-    outline-offset: -2px;
+  .product-details-info .reviews .single-review > img {
+      width: 40px !important;
+      height: 40px !important;
   }
   
-  
+  .product-details-info .reviews .single-review .review-images img {
+      width: 80px !important;
+      height: 80px !important;
+  }
+}
