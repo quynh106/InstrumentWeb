@@ -262,7 +262,7 @@
                                 <li><i class="lni lni-star"></i></li>
                                 {% endif %}
                             {% endfor %}
-                            <li><span>{{ product.reviews.count|default:0 }} Review(s)</span></li>
+                            <li><span>{{ p.reviews.count|default:0 }} Review(s)</span></li>
                         </ul>
                         <div class="price">
                             <span>${{ p.price|floatformat:2 }}</span>
