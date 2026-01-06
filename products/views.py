@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Product, Category, Brand, Review, ReviewImage
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count,Case, When
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
@@ -17,10 +17,51 @@ def home(request):
     # Tính avg_rating
     for product in trending_products:
         product.avg_rating = product.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
+
+    #filter cat && brand & search
+    search_query = request.GET.get('q', '')
+    category_id = request.GET.get('category', '')
+    brand_id = request.GET.get('brand', '')
+    # Clean up empty values
+    if category_id in ('', 'None'):
+        category_id = None
+    if brand_id in ('', 'None'):
+        brand_id = None
+
+    # Get filtered products
+    products = (
+        Product.get_filtered_products(search_query, category_id, brand_id)
+        .annotate(avg_rating=Avg("reviews__rating"))
+    )
+    
+    CATEGORY_ORDER = [
+    "Guitar",
+    "Piano",
+    "Drums",
+    "Flute",
+    "Violin",
+   
+]
+
+    feature_categories = Category.objects.filter(
+    name__in=CATEGORY_ORDER
+).annotate(
+    custom_order=Case(
+        *[When(name=name, then=pos) for pos, name in enumerate(CATEGORY_ORDER)]
+    )
+).order_by("custom_order")
     
     context = {
         'new_products': new_products,
         'trending_products': trending_products,
+        'products': products,
+        'search_query': search_query,
+        'category_id': category_id,
+        'brand_id': brand_id,
+        'categories': Category.objects.all(),
+        'brands': Brand.objects.all().all(),
+        'feature_categories' : feature_categories,
+
     }
     
     return render(request, 'products/home.html', context)
@@ -75,6 +116,23 @@ def product_list(request):
 
 
 def product_detail(request, pk):
+    #filter cat && brand & search
+    search_query = request.GET.get('q', '')
+    category_id = request.GET.get('category', '')
+    brand_id = request.GET.get('brand', '')
+    # Clean up empty values
+    if category_id in ('', 'None'):
+        category_id = None
+    if brand_id in ('', 'None'):
+        brand_id = None
+
+    # Get filtered products
+    products = (
+        Product.get_filtered_products(search_query, category_id, brand_id)
+        .annotate(avg_rating=Avg("reviews__rating"))
+    )
+
+    #
     product = get_object_or_404(Product, pk=pk)
     product_images = product.images.all()
 
@@ -145,6 +203,12 @@ def product_detail(request, pk):
         "total_reviews": total_reviews,
         "star_filters": star_filters,
         "product_images": product_images,
+        'products': products,
+        'search_query': search_query,
+        'category_id': category_id,
+        'brand_id': brand_id,
+        'categories': Category.objects.all(),
+        'brands': Brand.objects.all().all(),
     })
 
 
@@ -156,6 +220,23 @@ BAD_WORDS = [
 
 @login_required
 def review_product(request, product_id):
+    #filter cat && brand & search
+    search_query = request.GET.get('q', '')
+    category_id = request.GET.get('category', '')
+    brand_id = request.GET.get('brand', '')
+    # Clean up empty values
+    if category_id in ('', 'None'):
+        category_id = None
+    if brand_id in ('', 'None'):
+        brand_id = None
+
+    # Get filtered products
+    products = (
+        Product.get_filtered_products(search_query, category_id, brand_id)
+        .annotate(avg_rating=Avg("reviews__rating"))
+    )
+
+    #
     product = get_object_or_404(Product, id=product_id)
 
     if request.method == "POST":
@@ -193,5 +274,11 @@ def review_product(request, product_id):
         return redirect('products:product_detail', pk=product_id)  # FIX: pk thay vì product_id
 
     return render(request, 'products/review.html', {
-        'product': product
+        'product': product,
+        'products': products,
+        'search_query': search_query,
+        'category_id': category_id,
+        'brand_id': brand_id,
+        'categories': Category.objects.all(),
+        'brands': Brand.objects.all().all(),
     })

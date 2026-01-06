@@ -79,11 +79,15 @@
                                 <i class="lni lni-user"></i>
                                 Hello, {{ user.username }}
                             </div>
+                            <ul class="user-login">
+                              <li>
+                                  <a href="#">Sign In</a>
+                              </li>
+                              <li>
+                                  <a href="#">Sign out</a>
+                              </li>
+                          </ul>
                             {% else %}
-                            <div class="user">
-                                <i class="lni lni-user"></i>
-                                Hello
-                            </div>
                             <ul class="user-login">
                                 <li>
                                     <a href="#">Sign In</a>
@@ -107,7 +111,7 @@
                     <div class="col-lg-3 col-md-3 col-7">
                         <!-- Start Header Logo -->
                         <a class="navbar-brand" href="{% url 'products:home' %}">
-                            <img src="{% static 'images/logo/logo.svg' %}" alt="Logo">
+                            <img src="{% static 'images/logo/logo.png' %}" alt="Logo">
                         </a>
                         <!-- End Header Logo -->
                     </div>
@@ -121,17 +125,22 @@
                                         <select id="select1">
                                             <option selected>All</option>
                                             {% for category in categories %}
-                                            <option value="{{ category.id }}">{{ category.name }}</option>
+                                            <option ><a href="{% url 'products:product_list' %}?category={{ category.id }}">{{ category.name }}</a></option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                 </div>
-                                <div class="search-input">
-                                    <input type="text" placeholder="Search" name="q" value="{{ search_query }}">
-                                </div>
-                                <div class="search-btn">
-                                    <button><i class="lni lni-search-alt"></i></button>
-                                </div>
+                                <form method="get" action="{% url 'products:product_list' %}">
+                                    <div class="d-flex">
+                                        <div class="search-input">
+                                            <input type="text" name="q" placeholder="Search Here..." value="{{ search_query }}">
+                                        </div>
+                                        <div class="search-btn">
+                                            <button type="submit"><i class="lni lni-search-alt"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                                
                             </div>
                             <!-- navbar search Ends -->
                         </div>
@@ -219,16 +228,8 @@
                                         <a href="{% url 'products:home' %}" class="active" aria-label="Toggle navigation">Home</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="dd-menu collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                                            data-bs-target="#submenu-1-2" aria-controls="navbarSupportedContent"
-                                            aria-expanded="false" aria-label="Toggle navigation">Shop</a>
-                                        <ul class="sub-menu collapse" id="submenu-1-2">
-                                            <li class="nav-item"><a href="{% url 'products:product_list' %}">All Products</a></li>
-                                            {% for category in categories|slice:":5" %}
-                                            <li class="nav-item"><a href="{% url 'products:product_list' %}?category={{ category.id }}">{{ category.name }}</a></li>
-                                            {% endfor %}
-                                        </ul>
-                                    </li>
+                                      <a href="{% url 'products:product_list' %}"  aria-label="Toggle navigation">Shop</a>
+                                  </li>
                                     <li class="nav-item">
                                         <a href="#" aria-label="Toggle navigation">About Us</a>
                                     </li>

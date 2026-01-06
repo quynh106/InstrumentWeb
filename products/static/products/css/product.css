@@ -1,42 +1,32 @@
+/* home */
+/* home - Featured Categories Images */
+.featured-categories .single-category img {
+  position: absolute !important;
+  right: 20px !important;
+  top: 50%;
+  -webkit-transform: translateY(-50%) !important;
+  transform: translateY(-50%) !important;
+  z-index: 1 !important;
+  width: 146.4px !important;
+  height: 148.575px !important;
+  object-fit: contain !important;
+  opacity: 0.9 !important;
+  max-width: 146.4px !important;
+  max-height: 148.575px !important;
+}
+
+.featured-categories .single-category {
+  position: relative;
+  overflow: visible;
+}
+
+.featured-categories .single-category .heading,
+.featured-categories .single-category ul {
+  position: relative;
+  z-index: 2;
+}
+
 /* product_list */
-#myCarousel {
-    width: 100%; /* rộng 80% màn hình */
-    height: 40vh; /* cao 40% màn hình */
-  }
-
-  #myCarousel .carousel-item img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover; /* giữ ảnh đẹp, không méo */
-  }
-
-  /* lớp overlay cho chữ và nhãn */
-  .carousel-caption {
-    position: absolute;
-    bottom: 10px; /* cách đáy ảnh */
-    left: 50%; /* cách trái ảnh */
-    transform: translateX(-50%); /* căn ngang chính xác */
-    color: #fff;
-    background: rgba(0, 0, 0, 0.2); /*  nền mờ để chữ dễ đọc */
-    padding: 10px;
-    border-radius: 5px;
-   
-  }
-
-  /* nhãn new góc trên trái */
-  .carousel-item .badge-new {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    background: linear-gradient(45deg, #ff6a00, #ee0979); /* gradient đẹp */
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 50px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
-    z-index: 10;
-  }
 
 /* details */
 
