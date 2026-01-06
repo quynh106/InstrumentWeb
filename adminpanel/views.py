@@ -29,9 +29,9 @@ def dashboard(request):
     # Đơn hàng gần đây
     recent_orders = Order.objects.all().order_by('-created_at')[:10]
 
-    # Sản phẩm bán chạy nhất
+   # Sản phẩm bán chạy nhất
     top_products = Product.objects.annotate(
-        total_sold=Sum('orderitem__quantity')
+    total_sold=Sum('orders_app_order_items__quantity') 
     ).order_by('-total_sold')[:5]
 
     context = {
@@ -156,15 +156,15 @@ def statistics(request):
     # Thống kê theo category
     category_stats = Category.objects.annotate(
         product_count=Count('products'),
-        total_sold=Sum('products__orderitem__quantity')
+        total_sold=Sum('products__orders_app_order_items__quantity') # Sửa ở đây
     )
 
     # Thống kê theo brand
     brand_stats = Brand.objects.annotate(
         product_count=Count('products'),
-        total_sold=Sum('products__orderitem__quantity')
+        total_sold=Sum('products__orders_app_order_items__quantity') # Sửa ở đây
     )
-
+    
     # Thống kê đơn hàng theo trạng thái
     order_stats = Order.objects.values('status').annotate(
         count=Count('id'),
