@@ -114,6 +114,7 @@
 
 /* Container cho review images */
 .product-details-info .reviews .single-review .review-images {
+  
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 10px !important;
@@ -124,9 +125,11 @@
 
 /* Ảnh review - FORCE OVERRIDE */
 .product-details-info .reviews .single-review .review-images img {
+  aspect-ratio: 1 / 1;
+  max-width: 70px;
   position: static !important;
-  width: 100px !important;
-  height: 100px !important;
+  width: 100% !important;
+  height: 100% !important;
   border-radius: 6px !important;
   object-fit: cover !important;
   margin: 0 !important;
@@ -151,8 +154,5 @@
       height: 40px !important;
   }
   
-  .product-details-info .reviews .single-review .review-images img {
-      width: 80px !important;
-      height: 80px !important;
-  }
+ 
 }
