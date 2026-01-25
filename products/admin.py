@@ -18,10 +18,10 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'category', 'brand', 'price', 'stock','image', 'created_at']
+    list_display = ['id', 'name', 'category', 'brand', 'original_price', 'price', 'stock','image', 'created_at']
     list_filter = ['category', 'brand', 'created_at']
     search_fields = ['name', 'description']
-    list_editable = ['price', 'stock','image']
+    list_editable = ['original_price', 'price', 'stock','image']
     inlines = [ProductImageInline]
     list_display_links = ['id', 'name']  # ID và Name sẽ là link vào trang change
     list_per_page = 20

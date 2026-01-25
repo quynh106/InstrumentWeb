@@ -149,6 +149,11 @@
                                     <div class="single-product">
                                         <div class="product-image">
                                             <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/300x300{% endif %}" alt="{{ product.name }}">
+                                            {% if product.discount_percent > 0 %}
+                                            <span class="sale-tag">
+                                           -{{ product.discount_percent }}%
+                                              </span>
+                                                 {% endif %}
                                             <div class="button">
                                                 <a href="{% url 'products:product_detail' product.pk %}" class="btn"><i
                                                         class="lni lni-cart"></i> Add to Cart</a>
@@ -171,6 +176,11 @@
                                             </ul>
                                             <div class="price">
                                                 <span>${{ product.price|floatformat:2 }}</span>
+                                                {% if product.discount_percent > 0 %}
+                                                    <span class="discount-price">
+                                                         ${{ product.original_price|floatformat:2 }}
+                                                     </span>
+                                                  {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -211,10 +221,14 @@
                                             <div class="col-lg-4 col-md-4 col-12">
                                                 <div class="product-image">
                                                     <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/300x300{% endif %}" alt="{{ product.name }}">
+                                                    {% if product.discount_percent > 0 %}
+                                                <span class="sale-tag">
+                                               -{{ product.discount_percent }}%
+                                                  </span>
+                                                     {% endif %}
                                                     <div class="button">
                                                         <a href="{% url 'products:product_detail' product.pk %}" class="btn"><i
-                                                                class="lni lni-cart"></i> Add to
-                                                            Cart</a>
+                                                                class="lni lni-cart"></i> Add to Cart</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -236,6 +250,11 @@
                                                     </ul>
                                                     <div class="price">
                                                         <span>${{ product.price|floatformat:2 }}</span>
+                                                        {% if product.discount_percent > 0 %}
+                                                            <span class="discount-price">
+                                                                 ${{ product.original_price|floatformat:2 }}
+                                                             </span>
+                                                          {% endif %}
                                                     </div>
                                                 </div>
                                             </div>

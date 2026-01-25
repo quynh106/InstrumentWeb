@@ -162,6 +162,11 @@
                         {% if forloop.counter <= 2 %}
                         <span class="new-tag">New</span>
                         {% endif %}
+                        {% if product.discount_percent > 0 %}
+                                                <span class="sale-tag">
+                                               -{{ product.discount_percent }}%
+                                                  </span>
+                                                     {% endif %}
                         <div class="button">
                             <a href="{% url 'products:product_detail' product.pk %}" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
                         </div>
@@ -183,6 +188,11 @@
                         </ul>
                         <div class="price">
                             <span>${{ product.price|floatformat:2 }}</span>
+                            {% if product.discount_percent > 0 %}
+                              <span class="discount-price">
+                              ${{ product.original_price|floatformat:2 }}
+                              </span>
+                               {% endif %}
                         </div>
                     </div>
                 </div>
@@ -198,27 +208,7 @@
 </section>
 <!-- End Trending Product Area -->
 
-<!-- Start Call Action Area -->
-<section class="call-action section">
-    <div class="container">
-        <div class="row ">
-            <div class="col-lg-8 offset-lg-2 col-12">
-                <div class="inner">
-                    <div class="content">
-                        <h2 class="wow fadeInUp" data-wow-delay=".4s">Currently You are using free<br>
-                            Lite version of ShopGrids</h2>
-                        <p class="wow fadeInUp" data-wow-delay=".6s">Please, purchase full version of the template
-                            to get all pages,<br> features and commercial license.</p>
-                        <div class="button wow fadeInUp" data-wow-delay=".8s">
-                            <a href="javascript:void(0)" class="btn">Purchase Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End Call Action Area -->
+
 
 <!-- Start Banner Area -->
 <section class="banner section">

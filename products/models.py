@@ -21,13 +21,22 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE, related_name='products')
     description = models.TextField(blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    original_price = models.DecimalField(max_digits=10, decimal_places=2)#giá gốc
+    price = models.DecimalField(max_digits=10, decimal_places=2)#giá bán
     stock = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to='products/images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
+    
+    @property
+    def discount_percent(self):
+        if self.original_price and self.price < self.original_price:
+            return round(
+                (self.original_price - self.price) / self.original_price * 100
+            )
+        return 0
     
     def get_filtered_products(search='', category_id=None, brand_id=None):
         qs = Product.objects.all()
@@ -59,7 +68,16 @@ class Review(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     
-    is_hidden = models.BooleanField(default=False)
+    SENTIMENT_CHOICES = (
+        ("positive", "Positive"),
+        ("neutral", "Neutral"),
+        ("negative", "Negative"),
+    )
+    sentiment = models.CharField(
+        max_length=10,
+        choices=SENTIMENT_CHOICES,
+        default="neutral"
+    )
 
     def __str__(self):
         return f"{self.user.username} - {self.product.name}"

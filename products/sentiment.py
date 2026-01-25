@@ -12,19 +12,20 @@ def get_sentiment_analyzer():
     return _sentiment_analyzer
 
 
-def is_negative_comment(text: str) -> bool:
-    if not text or not text.strip():    #tiền xử lý: Tránh AI phân tích chuỗi trống, tránh lỗi.
-        return False
+
+
+def analyze_sentiment(text: str) -> str:
+    if not text or not text.strip():  #tiền xử lý: Tránh AI phân tích chuỗi trống, tránh lỗi.
+        return "neutral"
 
     analyzer = get_sentiment_analyzer()
-    result = analyzer(text[:256])[0]    #Cắt độ dài text để tối ưu hiệu năng
+    result = analyzer(text[:256])[0]     #Cắt độ dài text để tối ưu hiệu năng
 
     label = result["label"].upper()
-    score = result["score"]
 
- # Chỉ coi là tiêu cực khi NEG + độ tin cậy của dự đoán cao
-    return label == "NEG" and score > 0.8
-
-
-
+    if label == "POS":
+        return "positive"
+    elif label == "NEG":
+        return "negative"
+    return "neutral"
 

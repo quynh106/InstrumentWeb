@@ -4,7 +4,7 @@ from django.db.models import Avg, Count,Case, When
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
-from .sentiment import is_negative_comment
+from .sentiment import analyze_sentiment
 
 
 def home(request):
@@ -150,11 +150,11 @@ def product_detail(request, pk):
         product=product
     ).select_related("user")
 
-    visible_reviews = all_reviews.filter(is_hidden=False)
+    
 
     # Filter theo sao
     star = request.GET.get("star", "all")
-    reviews = visible_reviews
+    reviews = Review.objects.filter(product=product)
     
     if star and star != "all":
         try:
@@ -212,10 +212,7 @@ def product_detail(request, pk):
     })
 
 
-BAD_WORDS = [
-    "lừa đảo", "rác", "tệ", "chán", "dở",
-    "vcl", "đm", "shit", "không đáng tiền"
-]
+
 
 
 @login_required
@@ -244,24 +241,14 @@ def review_product(request, product_id):
         rating = int(request.POST.get("rating", 5))
         rating = max(1, min(rating, 5))
 
-        # Rule + AI để ẩn comment tiêu cực
-        is_hidden = False
-
-        # Tầng 1: Rule-based
-        lower_comment = comment.lower()
-        if any(word in lower_comment for word in BAD_WORDS):
-            is_hidden = True
-
-        # Tầng 2: AI sentiment
-        elif is_negative_comment(comment):
-            is_hidden = True
+        sentiment = analyze_sentiment(comment)
 
         review = Review.objects.create(
             product=product,
             user=request.user,
             rating=rating,
             comment=comment,
-            is_hidden=is_hidden
+            sentiment=sentiment
         )
 
         # Save images
