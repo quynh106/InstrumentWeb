@@ -468,6 +468,214 @@
   }
 },
 {
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2026-01-22T11:15:46.190Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "35",
+    "object_repr": "Gemeinhardt 2SP Flute",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Price\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2026-01-22T11:19:43.497Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "19",
+    "object_repr": "Yamaha P-125 Digital Piano",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Price\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2026-01-22T11:19:43.499Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "18",
+    "object_repr": "Yamaha F310 Acoustic Guitar",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Price\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "24",
+    "object_repr": "Quynh - Yamaha F310 Acoustic Guitar",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "23",
+    "object_repr": "Quynh - Gibson Les Paul Studio",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "22",
+    "object_repr": "Quynh - Gibson Les Paul Studio",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "21",
+    "object_repr": "Quynh - Gibson Les Paul Studio",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "19",
+    "object_repr": "Quynh - Fender Stratocaster Standard",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "15",
+    "object_repr": "Quynh - Fender Stratocaster Standard",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "9",
+    "object_repr": "Quynh - Gibson Les Paul Studio",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "8",
+    "object_repr": "Quynh - Gibson Les Paul Studio",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "6",
+    "object_repr": "Quynh - Gibson Les Paul Studio",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "4",
+    "object_repr": "Quynh - Gibson Les Paul Studio",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "3",
+    "object_repr": "Quynh - Roland FP-30X Digital Piano",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "2",
+    "object_repr": "Quynh - Yamaha P-125 Digital Piano",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 52,
+  "fields": {
+    "action_time": "2026-01-25T07:37:07.953Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "Quynh - Yamaha P-125 Digital Piano",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
@@ -1188,11 +1396,47 @@
   }
 },
 {
+  "model": "auth.permission",
+  "pk": 81,
+  "fields": {
+    "name": "Can add Hồ sơ người dùng",
+    "content_type": 21,
+    "codename": "add_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 82,
+  "fields": {
+    "name": "Can change Hồ sơ người dùng",
+    "content_type": 21,
+    "codename": "change_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 83,
+  "fields": {
+    "name": "Can delete Hồ sơ người dùng",
+    "content_type": 21,
+    "codename": "delete_profile"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 84,
+  "fields": {
+    "name": "Can view Hồ sơ người dùng",
+    "content_type": 21,
+    "codename": "view_profile"
+  }
+},
+{
   "model": "auth.user",
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$1000000$8fz2rBeanETOP6Wc7r2lp7$vo6n+aqfQHDN944uUmBF+3Sk51M0jmKkH5EcgD4wDtk=",
-    "last_login": "2025-12-21T05:57:11.459Z",
+    "last_login": "2026-01-22T11:13:23.255Z",
     "is_superuser": true,
     "username": "Quynh",
     "first_name": "",
@@ -1366,11 +1610,35 @@
   }
 },
 {
+  "model": "contenttypes.contenttype",
+  "pk": 21,
+  "fields": {
+    "app_label": "users",
+    "model": "profile"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "c06gz9jybox195my223wd3clk74lmk1s",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSE8Cgwu3fcbmpkBpWogKe3K-O_apAvd3nPOfYkJt7VMW8_LNCdxFlqcfjdCfuS6g3THemuSW12XmeSuyIN2ObaUn5fD_Tso2Mu3zpwCmkysojVXax2z86Q5gPJA7IYY0CEwBMUAUUdFJvnBsTI2gtHi_QHuEDdI:1vcLo5:9b7UoSE2EsqKet0c0yuJC-JPOZYLOzkDYEQH-RBhzmg",
+    "expire_date": "2026-01-18T10:57:57.455Z"
+  }
+},
+{
   "model": "sessions.session",
   "pk": "onyn7nssyl7ujq02y17nrmuewjao6vtc",
   "fields": {
     "session_data": ".eJxVjMsOwiAQRf-FtSE8Cgwu3fcbmpkBpWogKe3K-O_apAvd3nPOfYkJt7VMW8_LNCdxFlqcfjdCfuS6g3THemuSW12XmeSuyIN2ObaUn5fD_Tso2Mu3zpwCmkysojVXax2z86Q5gPJA7IYY0CEwBMUAUUdFJvnBsTI2gtHi_QHuEDdI:1vXCRL:EfLBOrz3scosOjEmJzaH49HQh2E-sWsOMUvoPQzKwYc",
     "expire_date": "2026-01-04T05:57:11.478Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "wv1so8s184kcpjcehssoc7qgq3ov4m0b",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQRf-FtSE8Cgwu3fcbmpkBpWogKe3K-O_apAvd3nPOfYkJt7VMW8_LNCdxFlqcfjdCfuS6g3THemuSW12XmeSuyIN2ObaUn5fD_Tso2Mu3zpwCmkysojVXax2z86Q5gPJA7IYY0CEwBMUAUUdFJvnBsTI2gtHi_QHuEDdI:1visct:NsGMbKZ5wQgGQx_xGxhQqrlwCjwP9wQdrqRk5VM9TRI",
+    "expire_date": "2026-02-05T11:13:23.268Z"
   }
 },
 {
@@ -1508,6 +1776,7 @@
     "category": 23,
     "brand": 20,
     "description": "Fender Stratocaster Standard is a premium guitar designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "799.00",
     "price": "799.00",
     "stock": 12,
     "image": "products/images/guitar-366301_1280.jpg",
@@ -1522,6 +1791,7 @@
     "category": 23,
     "brand": 21,
     "description": "Gibson Les Paul Studio is a premium guitar designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "1299.00",
     "price": "1299.00",
     "stock": 5,
     "image": "products/images/guitar-756326_1280.jpg",
@@ -1536,7 +1806,8 @@
     "category": 23,
     "brand": 19,
     "description": "Yamaha F310 Acoustic Guitar is a premium guitar designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
-    "price": "199.00",
+    "original_price": "199.00",
+    "price": "150.00",
     "stock": 20,
     "image": "products/images/guitar-2119_1280.jpg",
     "created_at": "2025-12-12T10:04:24.439Z"
@@ -1550,7 +1821,8 @@
     "category": 24,
     "brand": 19,
     "description": "Yamaha P-125 Digital Piano is a premium piano designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
-    "price": "649.00",
+    "original_price": "649.00",
+    "price": "640.00",
     "stock": 10,
     "image": "products/images/piano-5607683_1280.jpg",
     "created_at": "2025-12-12T10:04:24.450Z"
@@ -1564,6 +1836,7 @@
     "category": 24,
     "brand": 23,
     "description": "Casio CDP-S100 Digital Piano is a premium piano designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "499.00",
     "price": "499.00",
     "stock": 15,
     "image": "products/images/piano-2991621_1280.jpg",
@@ -1578,6 +1851,7 @@
     "category": 24,
     "brand": 22,
     "description": "Roland FP-30X Digital Piano is a premium piano designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "699.00",
     "price": "699.00",
     "stock": 8,
     "image": "products/images/piano-2171142_1280.jpg",
@@ -1592,6 +1866,7 @@
     "category": 25,
     "brand": 19,
     "description": "Yamaha V3 Student Violin is a premium violin designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "349.00",
     "price": "349.00",
     "stock": 7,
     "image": "products/images/violin-1061239_1280.jpg",
@@ -1606,6 +1881,7 @@
     "category": 25,
     "brand": 19,
     "description": "Stentor 1500 Violin is a premium violin designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "199.00",
     "price": "199.00",
     "stock": 10,
     "image": "products/images/violin-924349_1280.jpg",
@@ -1620,6 +1896,7 @@
     "category": 25,
     "brand": 19,
     "description": "Cremona SV-130 Violin is a premium violin designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "259.00",
     "price": "259.00",
     "stock": 6,
     "image": "products/images/violin-7775184_1280.jpg",
@@ -1634,6 +1911,7 @@
     "category": 26,
     "brand": 22,
     "description": "Roland TD-1DMK Drum Kit is a premium drums designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "699.00",
     "price": "699.00",
     "stock": 4,
     "image": "products/images/drum-set-1839383_1280.jpg",
@@ -1648,6 +1926,7 @@
     "category": 26,
     "brand": 19,
     "description": "Yamaha DTX402K Electronic Drums is a premium drums designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "499.00",
     "price": "499.00",
     "stock": 6,
     "image": "products/images/Electronic_Drums.jpg",
@@ -1662,6 +1941,7 @@
     "category": 26,
     "brand": 19,
     "description": "Pearl Roadshow Drum Set is a premium drums designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "399.00",
     "price": "399.00",
     "stock": 3,
     "image": "products/images/drums-2778190_1280.jpg",
@@ -1676,6 +1956,7 @@
     "category": 27,
     "brand": 19,
     "description": "Kala KA-15S Soprano Ukulele is a premium ukulele designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "89.00",
     "price": "89.00",
     "stock": 25,
     "image": "products/images/ukulele-6790888_1280.jpg",
@@ -1690,6 +1971,7 @@
     "category": 27,
     "brand": 19,
     "description": "Mahalo MR1 Ukulele is a premium ukulele designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "49.00",
     "price": "49.00",
     "stock": 30,
     "image": "products/images/ukulele.jpg",
@@ -1704,6 +1986,7 @@
     "category": 27,
     "brand": 20,
     "description": "Luna Tattoo Concert Ukulele is a premium ukulele designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "119.00",
     "price": "119.00",
     "stock": 12,
     "image": "products/images/ukulele-1376516_1280.jpg",
@@ -1718,6 +2001,7 @@
     "category": 28,
     "brand": 19,
     "description": "Yamaha YAS-280 Alto Saxophone is a premium saxophone designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "1300.00",
     "price": "1300.00",
     "stock": 3,
     "image": "products/images/saxophone-1412218_1920.jpg",
@@ -1732,6 +2016,7 @@
     "category": 28,
     "brand": 22,
     "description": "Jean Paul AS-400 Saxophone is a premium saxophone designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "499.00",
     "price": "499.00",
     "stock": 5,
     "image": "products/images/saxophone-3435687_1920.jpg",
@@ -1746,6 +2031,7 @@
     "category": 28,
     "brand": 19,
     "description": "Selmer Prelude AS711 is a premium saxophone designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "799.00",
     "price": "799.00",
     "stock": 4,
     "image": "products/images/saxophone-6591475_1920.jpg",
@@ -1760,6 +2046,7 @@
     "category": 29,
     "brand": 19,
     "description": "Yamaha YFL-222 Flute is a premium flute designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "499.00",
     "price": "499.00",
     "stock": 8,
     "image": "products/images/Yamaha_Flute.jpg",
@@ -1774,7 +2061,8 @@
     "category": 29,
     "brand": 22,
     "description": "Gemeinhardt 2SP Flute is a premium flute designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
-    "price": "399.00",
+    "original_price": "399.00",
+    "price": "300.00",
     "stock": 6,
     "image": "products/images/flute-1758800_1280.jpg",
     "created_at": "2025-12-12T10:04:24.573Z"
@@ -1788,6 +2076,7 @@
     "category": 29,
     "brand": 23,
     "description": "Jupiter JFL700 Flute is a premium flute designed for musicians who want high-quality sound, excellent durability, and a professional playing experience. Ideal for both beginners and advanced players looking to upgrade their equipment.",
+    "original_price": "449.00",
     "price": "449.00",
     "stock": 5,
     "image": "products/images/flute-1758799_1280.jpg",
@@ -1823,126 +2112,222 @@
 },
 {
   "model": "products.review",
-  "pk": 1,
+  "pk": 25,
   "fields": {
-    "product": 19,
+    "product": 16,
+    "user": 1,
+    "rating": 5,
+    "comment": "Âm thanh rất hay, chơi lên nghe rõ và ấm.",
+    "created_at": "2026-01-25T07:39:55.758Z",
+    "sentiment": "positive"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 26,
+  "fields": {
+    "product": 16,
     "user": 1,
     "rating": 4,
-    "comment": "product ok",
-    "created_at": "2025-12-13T12:40:03.936Z",
-    "is_hidden": false
+    "comment": "Đàn đẹp hơn trong hình, đóng gói kỹ.",
+    "created_at": "2026-01-25T07:40:18.428Z",
+    "sentiment": "positive"
   }
 },
 {
   "model": "products.review",
-  "pk": 2,
+  "pk": 27,
   "fields": {
-    "product": 19,
+    "product": 16,
     "user": 1,
-    "rating": 5,
-    "comment": "deliver quick",
-    "created_at": "2025-12-13T12:41:22.648Z",
-    "is_hidden": false
+    "rating": 4,
+    "comment": "Sản phẩm dùng ổn trong tầm giá.",
+    "created_at": "2026-01-25T07:40:39.285Z",
+    "sentiment": "positive"
   }
 },
 {
   "model": "products.review",
-  "pk": 3,
+  "pk": 28,
   "fields": {
-    "product": 21,
+    "product": 16,
     "user": 1,
-    "rating": 5,
-    "comment": "giao hàng đúng",
-    "created_at": "2025-12-21T05:57:40.394Z",
-    "is_hidden": false
+    "rating": 3,
+    "comment": "Âm thanh bình thường, không quá nổi bật.",
+    "created_at": "2026-01-25T07:40:50.464Z",
+    "sentiment": "neutral"
   }
 },
 {
   "model": "products.review",
-  "pk": 4,
+  "pk": 29,
+  "fields": {
+    "product": 16,
+    "user": 1,
+    "rating": 2,
+    "comment": "Âm thanh khá tệ, nghe bị đục.",
+    "created_at": "2026-01-25T07:41:05.774Z",
+    "sentiment": "negative"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 30,
   "fields": {
     "product": 17,
     "user": 1,
     "rating": 3,
-    "comment": "Giao hàng hơi chậm nhưng đàn ổn",
-    "created_at": "2025-12-21T07:38:29.563Z",
-    "is_hidden": false
+    "comment": "Chất lượng không xứng với giá tiền.",
+    "created_at": "2026-01-25T07:41:33.969Z",
+    "sentiment": "negative"
   }
 },
 {
   "model": "products.review",
-  "pk": 6,
+  "pk": 31,
   "fields": {
     "product": 17,
+    "user": 1,
+    "rating": 3,
+    "comment": "Âm không chuẩn, phải chỉnh lại nhiều.",
+    "created_at": "2026-01-25T07:41:49.795Z",
+    "sentiment": "negative"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 32,
+  "fields": {
+    "product": 18,
     "user": 1,
     "rating": 5,
-    "comment": "Đàn rất hay, âm tốt",
-    "created_at": "2025-12-21T07:39:16.155Z",
-    "is_hidden": false
+    "comment": "Đóng gói ổn, sản phẩm không trầy xước.",
+    "created_at": "2026-01-25T07:42:19.786Z",
+    "sentiment": "positive"
   }
 },
 {
   "model": "products.review",
-  "pk": 8,
+  "pk": 33,
   "fields": {
-    "product": 17,
-    "user": 1,
-    "rating": 1,
-    "comment": "Âm thanh dở, hoàn thiện kém, quá tệ",
-    "created_at": "2025-12-21T07:59:44.405Z",
-    "is_hidden": true
-  }
-},
-{
-  "model": "products.review",
-  "pk": 9,
-  "fields": {
-    "product": 17,
-    "user": 1,
-    "rating": 2,
-    "comment": "Mua về thất vọng, lừa đảo",
-    "created_at": "2025-12-21T08:00:14.248Z",
-    "is_hidden": true
-  }
-},
-{
-  "model": "products.review",
-  "pk": 15,
-  "fields": {
-    "product": 16,
+    "product": 18,
     "user": 1,
     "rating": 5,
-    "comment": "hàng ok",
-    "created_at": "2025-12-21T11:20:40.403Z",
-    "is_hidden": false
+    "comment": "Chơi trong phòng thì ổn.",
+    "created_at": "2026-01-25T07:42:32.216Z",
+    "sentiment": "neutral"
   }
 },
 {
   "model": "products.review",
+  "pk": 34,
+  "fields": {
+    "product": 18,
+    "user": 1,
+    "rating": 5,
+    "comment": "Đáng tiền, sẽ ủng hộ shop lần sau.",
+    "created_at": "2026-01-25T07:42:48.143Z",
+    "sentiment": "positive"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 35,
+  "fields": {
+    "product": 19,
+    "user": 1,
+    "rating": 5,
+    "comment": "Phù hợp cho người mới lẫn người chơi lâu năm.",
+    "created_at": "2026-01-25T07:43:10.488Z",
+    "sentiment": "neutral"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 36,
+  "fields": {
+    "product": 19,
+    "user": 1,
+    "rating": 5,
+    "comment": "Đúng hàng chính hãng, yên tâm sử dụng.",
+    "created_at": "2026-01-25T07:43:22.178Z",
+    "sentiment": "positive"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 37,
+  "fields": {
+    "product": 20,
+    "user": 1,
+    "rating": 5,
+    "comment": "Sản phẩm vượt mong đợi.",
+    "created_at": "2026-01-25T07:43:41.676Z",
+    "sentiment": "positive"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 38,
+  "fields": {
+    "product": 20,
+    "user": 1,
+    "rating": 3,
+    "comment": "Chơi trong phòng thì ổn.",
+    "created_at": "2026-01-25T07:43:59.805Z",
+    "sentiment": "neutral"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 39,
+  "fields": {
+    "product": 22,
+    "user": 1,
+    "rating": 3,
+    "comment": "Chơi lên bị rè, không hài lòng.",
+    "created_at": "2026-01-25T07:44:23.742Z",
+    "sentiment": "negative"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 40,
+  "fields": {
+    "product": 22,
+    "user": 1,
+    "rating": 5,
+    "comment": "Âm chưa thật sự nổi nhưng chấp nhận được.",
+    "created_at": "2026-01-25T07:44:37.535Z",
+    "sentiment": "neutral"
+  }
+},
+{
+  "model": "products.review",
+  "pk": 41,
+  "fields": {
+    "product": 22,
+    "user": 1,
+    "rating": 5,
+    "comment": "Thiết kế đẹp, nhìn rất sang.",
+    "created_at": "2026-01-25T07:44:54.938Z",
+    "sentiment": "positive"
+  }
+},
+{
+  "model": "products.reviewimage",
+  "pk": 18,
+  "fields": {
+    "review": 25,
+    "image": "products/reviews/guitar_d7Kbn8s.jpg"
+  }
+},
+{
+  "model": "products.reviewimage",
   "pk": 19,
   "fields": {
-    "product": 16,
-    "user": 1,
-    "rating": 2,
-    "comment": "sản phẩm bể, không hài lòng",
-    "created_at": "2025-12-21T13:48:57.095Z",
-    "is_hidden": true
-  }
-},
-{
-  "model": "products.reviewimage",
-  "pk": 7,
-  "fields": {
-    "review": 15,
-    "image": "products/reviews/OIP_1_dh01j6r.jpg"
-  }
-},
-{
-  "model": "products.reviewimage",
-  "pk": 8,
-  "fields": {
-    "review": 15,
-    "image": "products/reviews/OIP_NBsbL5U.jpg"
+    "review": 25,
+    "image": "products/reviews/OIP_fG5rMLJ.jpg"
   }
 }
 ]

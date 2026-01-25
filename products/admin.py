@@ -33,8 +33,8 @@ class ReviewImageInline(admin.TabularInline):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ['id', 'product', 'user', 'rating','comment', 'created_at']
-    list_filter = ['rating', 'created_at']
+    list_display = ['id', 'product', 'user', 'rating','comment', 'sentiment', 'created_at']
+    list_filter = ['rating', 'sentiment', 'created_at']
     search_fields = ['product__name', 'user__username', 'comment']
     inlines = [ReviewImageInline]
     list_per_page = 20
