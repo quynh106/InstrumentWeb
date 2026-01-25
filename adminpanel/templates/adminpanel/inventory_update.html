@@ -1,90 +1,235 @@
 {% extends 'adminpanel/base_admin.html' %}
 
-{% block title %}Update Stock - {{ product.name }}{% endblock %}
+{% block title %}Stock Adjustment - {{ product.name }}{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Update Stock</h1>
-    <a href="{% url 'adminpanel:inventory_list' %}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Inventory
-    </a>
-</div>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --glass-bg: #ffffff;
+        --dark-accent: #0f172a;
+        --primary-blue: #38bdf8;
+    }
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Product Information</h5>
-            </div>
-            <div class="card-body">
-                <p><strong>Name:</strong> {{ product.name }}</p>
-                <p><strong>Category:</strong> {{ product.category.name }}</p>
-                <p><strong>Brand:</strong> {{ product.brand.name }}</p>
-                <p><strong>Price:</strong> ${{ product.price|floatformat:2 }}</p>
-                <p class="mb-0"><strong>Current Stock:</strong>
-                    {% if product.stock < 10 %}
-                        <span class="badge bg-danger">{{ product.stock }}</span>
-                    {% elif product.stock < 20 %}
-                        <span class="badge bg-warning text-dark">{{ product.stock }}</span>
-                    {% else %}
-                        <span class="badge bg-success">{{ product.stock }}</span>
-                    {% endif %}
-                </p>
-            </div>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+    }
+
+    /* Tiêu đề & Nút quay lại */
+    .btn-back {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        color: #64748b;
+        padding: 8px 16px;
+        transition: all 0.3s;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .btn-back:hover {
+        background: var(--dark-accent);
+        color: white;
+    }
+
+    /* Card Styling */
+    .adjustment-card {
+        background: var(--glass-bg);
+        border: none;
+        border-radius: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .card-header-dark {
+        background: var(--dark-accent);
+        color: white;
+        padding: 1.25rem 1.5rem;
+        border: none;
+    }
+
+    /* Info List */
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .info-item:last-child { border-bottom: none; }
+
+    /* Form Styling */
+    .form-label {
+        font-weight: 700;
+        font-size: 0.85rem;
+        color: #475569;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .form-control, .form-select {
+        border-radius: 12px;
+        padding: 12px 16px;
+        border: 1.5px solid #e2e8f0;
+        transition: all 0.3s;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+    }
+
+    /* Stock Badge */
+    .stock-display {
+        padding: 15px;
+        border-radius: 16px;
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.5rem;
+    }
+
+    .stock-low { background: #fee2e2; color: #ef4444; border: 1px solid #fecaca; }
+    .stock-mid { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; }
+    .stock-high { background: #dcfce7; color: #16a34a; border: 1px solid #bbf7d0; }
+
+    /* Submit Button */
+    .btn-save {
+        background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+        border: none;
+        border-radius: 15px;
+        padding: 14px;
+        font-weight: 700;
+        color: white;
+        transition: all 0.3s;
+    }
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.2);
+    }
+</style>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-0">Stock <span class="text-primary">Adjustment</span></h2>
+            <p class="text-muted small">Update inventory levels for logistics control</p>
         </div>
+        <a href="{% url 'adminpanel:inventory_list' %}" class="btn-back">
+            <i class="bi bi-arrow-left me-2"></i> Back to Inventory
+        </a>
     </div>
 
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Update Stock</h5>
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div class="adjustment-card shadow-sm">
+                <div class="card-header-dark">
+                    <h6 class="mb-0 fw-bold"><i class="bi bi-info-circle me-2"></i>Product Identity</h6>
+                </div>
+                <div class="card-body p-4 text-center border-bottom bg-light">
+                    <div class="mb-3">
+                        <label class="form-label d-block text-muted">Current Inventory Status</label>
+                        <div class="stock-display 
+                            {% if product.stock < 10 %}stock-low
+                            {% elif product.stock < 20 %}stock-mid
+                            {% else %}stock-high{% endif %}">
+                            {{ product.stock }} Units
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="info-item">
+                        <span class="text-muted">Item Name:</span>
+                        <span class="fw-bold text-dark">{{ product.name }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="text-muted">Category:</span>
+                        <span class="badge bg-secondary px-3" style="border-radius: 8px;">{{ product.category.name }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="text-muted">Brand:</span>
+                        <span class="fw-semibold">{{ product.brand.name }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="text-muted">Unit Price:</span>
+                        <span class="fw-bold text-primary">${{ product.price|floatformat:2 }}</span>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <form method="post">
-                    {% csrf_token %}
+        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Action</label>
-                        <select name="action" class="form-select" id="actionSelect">
-                            <option value="add">Add Stock</option>
-                            <option value="remove">Remove Stock</option>
-                            <option value="adjust">Set Stock to Exact Value</option>
-                        </select>
-                    </div>
+        <div class="col-md-7">
+            <div class="adjustment-card shadow-sm">
+                <div class="card-header-dark" style="background: var(--primary-blue);">
+                    <h6 class="mb-0 fw-bold text-dark"><i class="bi bi-gear-wide-connected me-2"></i>Operation Details</h6>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
 
-                    <div class="mb-3">
-                        <label class="form-label">Quantity</label>
-                        <input type="number" name="quantity" class="form-control" min="0" required>
-                        <small class="text-muted">Enter the quantity to add, remove, or set</small>
-                    </div>
+                        <div class="mb-4">
+                            <label class="form-label">Strategic Action</label>
+                            <select name="action" class="form-select" id="actionSelect">
+                                <option value="add" data-icon="bi-plus-circle">Add New Stock (Inflow)</option>
+                                <option value="remove" data-icon="bi-dash-circle">Remove Stock (Outflow)</option>
+                                <option value="adjust" data-icon="bi-check-circle">Set Exact Value (Audit)</option>
+                            </select>
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Notes (Optional)</label>
-                        <textarea name="notes" class="form-control" rows="3" placeholder="Reason for stock change..."></textarea>
-                    </div>
+                        <div class="mb-4">
+                            <label class="form-label">Quantity Adjustment</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white" id="actionIcon">
+                                    <i class="bi bi-plus-lg text-primary"></i>
+                                </span>
+                                <input type="number" name="quantity" class="form-control" min="0" placeholder="0" required>
+                            </div>
+                            <div class="mt-2 small" id="helpText" style="color: #64748b;">
+                                <i class="bi bi-info-circle me-1"></i> Enter the quantity to add to current stock.
+                            </div>
+                        </div>
 
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-save"></i> Update Stock
-                    </button>
-                </form>
+                        <div class="mb-4">
+                            <label class="form-label">Adjustment Notes (Required for Audit)</label>
+                            <textarea name="notes" class="form-control" rows="4" placeholder="Mention why this change is happening (e.g., New shipment arrival, Damaged goods, Stock audit...)"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 btn-save">
+                            <i class="bi bi-shield-check me-2"></i> Commit Adjustment
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Optional: Add client-side validation or dynamic help text
-    document.getElementById('actionSelect').addEventListener('change', function() {
-        const helpText = document.querySelector('.text-muted');
+    // Xử lý thay đổi UI động dựa trên lựa chọn Action
+    const actionSelect = document.getElementById('actionSelect');
+    const helpText = document.getElementById('helpText');
+    const actionIcon = document.getElementById('actionIcon');
+
+    actionSelect.addEventListener('change', function() {
         const action = this.value;
+        let iconHtml = '';
+        let text = '';
 
         if (action === 'add') {
-            helpText.textContent = 'Enter the quantity to add to current stock';
+            iconHtml = '<i class="bi bi-plus-lg text-success"></i>';
+            text = '<i class="bi bi-info-circle me-1"></i> Enter the quantity to <strong>add</strong> to current stock.';
         } else if (action === 'remove') {
-            helpText.textContent = 'Enter the quantity to remove from current stock';
+            iconHtml = '<i class="bi bi-dash-lg text-danger"></i>';
+            text = '<i class="bi bi-info-circle me-1"></i> Enter the quantity to <strong>remove</strong> from current stock.';
         } else {
-            helpText.textContent = 'Enter the exact stock value to set';
+            iconHtml = '<i class="bi bi-check-lg text-primary"></i>';
+            text = '<i class="bi bi-info-circle me-1"></i> Enter the <strong>exact</strong> stock value to set in the database.';
         }
+        
+        actionIcon.innerHTML = iconHtml;
+        helpText.innerHTML = text;
     });
 </script>
 {% endblock %}
