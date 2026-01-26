@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, Category, Brand, Review, ReviewImage
+from .models import Product, Category, Brand, Review, ReviewImage, FlashSale
 from django.db.models import Avg, Count,Case, When
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 from .sentiment import analyze_sentiment
 
@@ -14,6 +15,19 @@ def home(request):
     # 8 sản phẩm trending
     trending_products = Product.objects.all()[:8]
     
+    #flash sale
+    now = timezone.now()
+
+    flash_sales = FlashSale.objects.select_related("product").filter(
+        is_active=True,
+        start_time__lte=now,
+        end_time__gte=now
+    )
+
+    flash_sale_end = None
+    if flash_sales.exists():
+        flash_sale_end = flash_sales.order_by("end_time").first().end_time
+
     # Tính avg_rating
     for product in trending_products:
         product.avg_rating = product.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
@@ -53,6 +67,8 @@ def home(request):
     
     context = {
         'new_products': new_products,
+        "flash_sales": flash_sales,
+        "flash_sale_end": flash_sale_end,
         'trending_products': trending_products,
         'products': products,
         'search_query': search_query,

@@ -140,6 +140,55 @@
 </section>
 <!-- End Features Area -->
 
+<!-- Start Flash Sale Area -->
+<section class="flash-sale section">
+    <div class="container">
+        <div class="row align-items-center mb-3">
+            <div class="col-lg-6 col-6">
+                <h3 class="flash-title">
+                    ⚡ FLASH SALE
+                    {% if flash_sale_end %}
+                    <span 
+                      class="flash-countdown"
+                      data-end="{{ flash_sale_end|date:'U' }}">
+                    </span>
+                    {% endif %}
+                </h3>
+                
+            </div>
+        </div>
+
+        <div class="flash-slider">
+            {% for sale in flash_sales %}
+            <div class="flash-item">
+                <div class="single-product">
+                    <div class="product-image">
+                        <img src="{{ sale.product.image.url }}">
+                        <span class="flash-tag">
+                            -{{ sale.discount_percent }}%
+                        </span>
+                    </div>
+
+                    <div class="product-info">
+                        <h4>{{ sale.product.name }}</h4>
+                        <div class="price">
+                            <span>{{ sale.flash_price }} ₫</span>
+                            <span class="discount-price">
+                                {{ sale.product.original_price }} ₫
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>Hiện chưa có flash sale</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- End Flash Sale Area -->
+
 <!-- Start Trending Product Area -->
 <section class="trending-product section" style="margin-top: 12px;">
     <div class="container">
@@ -167,6 +216,7 @@
                                                -{{ product.discount_percent }}%
                                                   </span>
                                                      {% endif %}
+                                                        
                         <div class="button">
                             <a href="{% url 'products:product_detail' product.pk %}" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
                         </div>
@@ -700,5 +750,66 @@
         controls: true,
         controlsText: ['<i class="lni lni-chevron-left"></i>', '<i class="lni lni-chevron-right"></i>'],
     });
+
+
+    /* Flash Sale Slider */
+tns({
+    container: '.flash-slider',
+    items: 4,          // Hiển thị 4 sản phẩm
+    slideBy: 3,        //  Trượt mỗi lần 3 sản phẩm
+    autoplay: false,
+    mouseDrag: true,
+    gutter: 15,
+    nav: false,
+    controls: true,
+    controlsText: [
+        '<i class="lni lni-chevron-left"></i>',
+        '<i class="lni lni-chevron-right"></i>'
+    ],
+    responsive: {
+        0: {
+            items: 1,
+            slideBy: 1
+        },
+        576: {
+            items: 2,
+            slideBy: 2
+        },
+        992: {
+            items: 4,
+            slideBy: 3
+        }
+    }
+});
+
+/* Flash Sale Countdown */
+document.addEventListener("DOMContentLoaded", function () {
+  const el = document.querySelector(".flash-countdown");
+  if (!el) return;
+
+  const end = parseInt(el.dataset.end) * 1000;
+
+  const tick = () => {
+    const diff = end - Date.now();
+
+    if (diff <= 0) {
+      el.innerText = "⏰ Đã kết thúc";
+      return;
+    }
+
+    const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+    const m = String(Math.floor(diff % 3600000 / 60000)).padStart(2, '0');
+    const s = String(Math.floor(diff % 60000 / 1000)).padStart(2, '0');
+
+    el.innerText = `${h}:${m}:${s}`;
+  };
+
+  tick();
+  setInterval(tick, 1000);
+});
+
+
+
 </script>
+    
 {% endblock %}

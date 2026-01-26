@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 
 
 
@@ -89,3 +89,33 @@ class ReviewImage(models.Model):
         related_name="images"
     )
     image = models.ImageField(upload_to="products/reviews/")
+
+
+
+
+class FlashSale(models.Model):
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name="flash_sales"
+    )
+    flash_price = models.DecimalField(max_digits=10, decimal_places=2)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    quantity = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    def is_running(self):
+        now = timezone.now()
+        return self.is_active and self.start_time <= now <= self.end_time
+
+    def discount_percent(self):
+        if self.product.original_price:
+            return round(
+                (self.product.original_price - self.flash_price)
+                / self.product.original_price * 100
+            )
+
+    def __str__(self):
+        return f"FlashSale {self.product.name}"
+

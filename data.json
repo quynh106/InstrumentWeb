@@ -676,6 +676,214 @@
   }
 },
 {
+  "model": "admin.logentry",
+  "pk": 53,
+  "fields": {
+    "action_time": "2026-01-25T10:02:42.632Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "1",
+    "object_repr": "FlashSale object (1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 54,
+  "fields": {
+    "action_time": "2026-01-25T10:02:59.178Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "2",
+    "object_repr": "FlashSale object (2)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 55,
+  "fields": {
+    "action_time": "2026-01-25T10:03:54.300Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "3",
+    "object_repr": "FlashSale object (3)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 56,
+  "fields": {
+    "action_time": "2026-01-25T10:59:55.314Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "4",
+    "object_repr": "FlashSale object (4)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 57,
+  "fields": {
+    "action_time": "2026-01-25T11:00:13.823Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "5",
+    "object_repr": "FlashSale object (5)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 58,
+  "fields": {
+    "action_time": "2026-01-26T06:22:20.787Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "6",
+    "object_repr": "FlashSale object (6)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 59,
+  "fields": {
+    "action_time": "2026-01-26T06:22:43.074Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "7",
+    "object_repr": "FlashSale object (7)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 60,
+  "fields": {
+    "action_time": "2026-01-26T06:22:55.632Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "8",
+    "object_repr": "FlashSale object (8)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 61,
+  "fields": {
+    "action_time": "2026-01-26T06:23:09.396Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "9",
+    "object_repr": "FlashSale object (9)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 62,
+  "fields": {
+    "action_time": "2026-01-26T06:23:38.752Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "10",
+    "object_repr": "FlashSale object (10)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 63,
+  "fields": {
+    "action_time": "2026-01-26T10:39:08.455Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "1",
+    "object_repr": "FlashSale Gibson Les Paul Studio",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 64,
+  "fields": {
+    "action_time": "2026-01-26T10:39:22.915Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "2",
+    "object_repr": "FlashSale Yamaha P-125 Digital Piano",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 65,
+  "fields": {
+    "action_time": "2026-01-26T10:39:32.637Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "3",
+    "object_repr": "FlashSale Yamaha V3 Student Violin",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 66,
+  "fields": {
+    "action_time": "2026-01-26T10:39:45.849Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "4",
+    "object_repr": "FlashSale Yamaha V3 Student Violin",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 67,
+  "fields": {
+    "action_time": "2026-01-26T10:39:56.628Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "5",
+    "object_repr": "FlashSale Yamaha YAS-280 Alto Saxophone",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 68,
+  "fields": {
+    "action_time": "2026-01-26T11:05:17.309Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "6",
+    "object_repr": "FlashSale Yamaha V3 Student Violin",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
@@ -1432,6 +1640,42 @@
   }
 },
 {
+  "model": "auth.permission",
+  "pk": 85,
+  "fields": {
+    "name": "Can add flash sale",
+    "content_type": 22,
+    "codename": "add_flashsale"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 86,
+  "fields": {
+    "name": "Can change flash sale",
+    "content_type": 22,
+    "codename": "change_flashsale"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 87,
+  "fields": {
+    "name": "Can delete flash sale",
+    "content_type": 22,
+    "codename": "delete_flashsale"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 88,
+  "fields": {
+    "name": "Can view flash sale",
+    "content_type": 22,
+    "codename": "view_flashsale"
+  }
+},
+{
   "model": "auth.user",
   "pk": 1,
   "fields": {
@@ -1615,6 +1859,14 @@
   "fields": {
     "app_label": "users",
     "model": "profile"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 22,
+  "fields": {
+    "app_label": "products",
+    "model": "flashsale"
   }
 },
 {
@@ -2328,6 +2580,78 @@
   "fields": {
     "review": 25,
     "image": "products/reviews/OIP_fG5rMLJ.jpg"
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 1,
+  "fields": {
+    "product": 17,
+    "flash_price": "50.00",
+    "start_time": "2026-01-26T10:38:55Z",
+    "end_time": "2026-01-26T18:00:00Z",
+    "quantity": 6,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 2,
+  "fields": {
+    "product": 19,
+    "flash_price": "45.00",
+    "start_time": "2026-01-26T10:39:15Z",
+    "end_time": "2026-01-26T18:00:00Z",
+    "quantity": 8,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 3,
+  "fields": {
+    "product": 22,
+    "flash_price": "55.00",
+    "start_time": "2026-01-26T10:39:27Z",
+    "end_time": "2026-01-26T18:00:00Z",
+    "quantity": 8,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 4,
+  "fields": {
+    "product": 22,
+    "flash_price": "55.00",
+    "start_time": "2026-01-26T10:39:39Z",
+    "end_time": "2026-01-26T18:00:00Z",
+    "quantity": 7,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 5,
+  "fields": {
+    "product": 31,
+    "flash_price": "58.00",
+    "start_time": "2026-01-26T10:39:50Z",
+    "end_time": "2026-01-26T18:00:00Z",
+    "quantity": 9,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 6,
+  "fields": {
+    "product": 22,
+    "flash_price": "66.00",
+    "start_time": "2026-01-26T11:05:05Z",
+    "end_time": "2026-01-26T19:00:00Z",
+    "quantity": 5,
+    "is_active": true
   }
 }
 ]

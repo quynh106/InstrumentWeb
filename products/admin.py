@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Brand, Product, Review, ProductImage,ReviewImage
+from .models import Category, Brand, Product, Review, ProductImage,ReviewImage, FlashSale
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -38,3 +38,13 @@ class ReviewAdmin(admin.ModelAdmin):
     search_fields = ['product__name', 'user__username', 'comment']
     inlines = [ReviewImageInline]
     list_per_page = 20
+
+
+@admin.register(FlashSale)
+class FlashSaleAdmin(admin.ModelAdmin):
+    list_display = (
+        "product", "flash_price",
+        "start_time", "end_time",
+        "is_active"
+    )
+    list_filter = ("is_active",)
