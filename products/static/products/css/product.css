@@ -30,7 +30,16 @@
 /* flash sale */
 
 
-
+/* home product list */
+.home-product-list .single-list .list-image{
+  aspect-ratio: 1 / 1;
+}
+.home-product-list .single-list .list-image a img
+ {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 
 /* product_list */

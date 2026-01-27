@@ -28,6 +28,14 @@ def home(request):
     if flash_sales.exists():
         flash_sale_end = flash_sales.order_by("end_time").first().end_time
 
+    # 5 sản phẩm chỗ special, Home Product List
+    random_products = (
+    Product.objects
+    .annotate(avg_rating=Avg("reviews__rating"))
+    .order_by('?')
+)
+    
+
     # Tính avg_rating
     for product in trending_products:
         product.avg_rating = product.reviews.aggregate(Avg('rating'))['rating__avg'] or 0
@@ -70,6 +78,7 @@ def home(request):
         "flash_sales": flash_sales,
         "flash_sale_end": flash_sale_end,
         'trending_products': trending_products,
+        'random_products': random_products,
         'products': products,
         'search_query': search_query,
         'category_id': category_id,
