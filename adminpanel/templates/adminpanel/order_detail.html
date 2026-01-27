@@ -1,90 +1,241 @@
 {% extends 'adminpanel/base_admin.html' %}
 
-{% block title %}Order #{{ order.id }}{% endblock %}
+{% block title %}Order Insight #{{ order.id }}{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>Order #{{ order.id }}</h1>
-    <a href="{% url 'adminpanel:order_list' %}" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-left"></i> Back to Orders
-    </a>
-</div>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --glass-bg: #ffffff;
+        --dark-accent: #0f172a;
+        --primary-blue: #38bdf8;
+    }
 
-<div class="row">
-    <!-- ORDER INFO -->
-    <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Order Items</h5>
-            </div>
-            <div class="card-body">
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+    }
+
+    /* Tiêu đề & Nút quay lại */
+    .btn-back {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        color: #64748b;
+        padding: 8px 16px;
+        transition: all 0.3s;
+        font-weight: 600;
+    }
+
+    .btn-back:hover {
+        background: var(--dark-accent);
+        color: white;
+    }
+
+    /* Thẻ chính */
+    .order-glass-card {
+        background: var(--glass-bg);
+        border: none;
+        border-radius: 24px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        overflow: hidden;
+    }
+
+    .card-header-luxury {
+        background: var(--dark-accent);
+        color: white;
+        padding: 1.5rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Bảng sản phẩm */
+    .table thead th {
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: none;
+        padding: 1rem;
+    }
+
+    .table td {
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    /* Cột tổng tiền */
+    .summary-box {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 1.5rem;
+    }
+
+    /* Badge trạng thái (Đồng bộ Order List) */
+    .status-pill {
+        padding: 6px 14px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+    }
+    .status-pending { background: #fef3c7; color: #92400e; }
+    .status-paid { background: #e0f2fe; color: #0369a1; }
+    .status-shipped { background: #e0e7ff; color: #3730a3; }
+    .status-completed { background: #dcfce7; color: #166534; }
+    .status-cancelled { background: #fee2e2; color: #991b1b; }
+
+    /* Form update */
+    .update-box {
+        background: #ffffff;
+        border-radius: 20px;
+        border: 2px solid #f1f5f9;
+        padding: 1.5rem;
+    }
+
+    .form-select-custom {
+        border-radius: 12px;
+        padding: 0.75rem;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 1rem;
+    }
+
+    .btn-update {
+        border-radius: 12px;
+        padding: 0.75rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+        border: none;
+        box-shadow: 0 4px 15px rgba(58, 123, 213, 0.3);
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-0">Order <span style="color: var(--primary-blue);">#ORD-{{ order.id }}</span></h2>
+            <p class="text-muted small mb-0"><i class="bi bi-calendar3 me-1"></i> Recorded on {{ order.created_at|date:"M d, Y" }}</p>
+        </div>
+        <a href="{% url 'adminpanel:order_list' %}" class="btn-back d-flex align-items-center">
+            <i class="bi bi-arrow-left me-2"></i> Return to Fleet
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="order-glass-card">
+                <div class="card-header-luxury">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-box-seam me-2 text-info"></i>Manifest Details</h5>
+                    <span class="status-pill 
+                        {% if order.status == 'pending' %}status-pending
+                        {% elif order.status == 'paid' %}status-paid
+                        {% elif order.status == 'shipped' %}status-shipped
+                        {% elif order.status == 'completed' %}status-completed
+                        {% else %}status-cancelled{% endif %}">
+                        {{ order.status|upper }}
+                    </span>
+                </div>
+                
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table align-middle mb-0">
                         <thead>
                             <tr>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Subtotal</th>
+                                <th class="ps-4">Product Name</th>
+                                <th>Unit Price</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-end pe-4">Subtotal</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for item in order_items %}
                             <tr>
-                                <td>{{ item.product.name }}</td>
+                                <td class="ps-4">
+                                    <div class="fw-bold text-dark">{{ item.product.name }}</div>
+                                    <div class="text-muted extra-small" style="font-size: 0.7rem;">SKU: #PRO-{{ item.product.id }}</div>
+                                </td>
                                 <td>${{ item.price_at_time|floatformat:2 }}</td>
-                                <td>{{ item.quantity }}</td>
-                                <td>${{ item.get_total|floatformat:2 }}</td>
+                                <td class="text-center">
+                                    <span class="badge bg-light text-dark px-3 py-2" style="border-radius: 8px;">{{ item.quantity }}</span>
+                                </td>
+                                <td class="text-end pe-4 fw-bold text-dark">
+                                    ${{ item.get_total|floatformat:2 }}
+                                </td>
                             </tr>
                             {% endfor %}
-                            <tr>
-                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                                <td><strong>${{ order.total_price|floatformat:2 }}</strong></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
+
+                <div class="p-4 bg-white border-top">
+                    <div class="row justify-content-end">
+                        <div class="col-md-5">
+                            <div class="summary-box">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small">Subtotal:</span>
+                                    <span class="fw-bold text-dark">${{ order.total_price|floatformat:2 }}</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted small">Tax (0%):</span>
+                                    <span class="fw-bold text-dark">$0.00</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <span class="h6 fw-bold mb-0">TOTAL AMOUNT:</span>
+                                    <span class="h5 fw-bold text-primary mb-0">${{ order.total_price|floatformat:2 }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- ORDER STATUS & CUSTOMER INFO -->
-    <div class="col-md-4">
-        <!-- Status Update -->
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="mb-0">Update Status</h5>
-            </div>
-            <div class="card-body">
+        <div class="col-lg-4">
+            <div class="update-box mb-4 shadow-sm">
+                <h6 class="fw-bold text-dark mb-3"><i class="bi bi-arrow-repeat me-2 text-primary"></i>Operation Center</h6>
                 <form method="post" action="{% url 'adminpanel:order_update_status' order.id %}">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label">Current Status</label>
-                        <select name="status" class="form-select">
-                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
-                            <option value="paid" {% if order.status == 'paid' %}selected{% endif %}>Paid</option>
-                            <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
-                            <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
-                            <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-check-circle"></i> Update Status
+                    <label class="small text-muted fw-bold mb-2">WORKFLOW STATUS</label>
+                    <select name="status" class="form-select form-select-custom">
+                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Pending</option>
+                        <option value="paid" {% if order.status == 'paid' %}selected{% endif %}>Paid</option>
+                        <option value="shipped" {% if order.status == 'shipped' %}selected{% endif %}>Shipped</option>
+                        <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>Completed</option>
+                        <option value="cancelled" {% if order.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary w-100 btn-update">
+                        Confirm Status Change
                     </button>
                 </form>
             </div>
-        </div>
 
-        <!-- Customer Info -->
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Customer Info</h5>
-            </div>
-            <div class="card-body">
-                <p class="mb-2"><strong>Username:</strong> {{ order.user.username }}</p>
-                <p class="mb-2"><strong>Email:</strong> {{ order.user.email|default:"N/A" }}</p>
-                <p class="mb-2"><strong>Order Date:</strong> {{ order.created_at|date:"M d, Y H:i" }}</p>
-                <p class="mb-0"><strong>Last Updated:</strong> {{ order.updated_at|date:"M d, Y H:i" }}</p>
+            <div class="order-glass-card shadow-sm">
+                <div class="p-4 border-bottom bg-light">
+                    <h6 class="fw-bold mb-0 text-dark">Customer Intelligence</h6>
+                </div>
+                <div class="p-4">
+                    <div class="d-flex align-items-center mb-4">
+                        <div style="width: 50px; height: 50px; background: #e0f2fe; color: #0369a1; border-radius: 15px;" class="d-flex align-items-center justify-content-center fw-bold fs-4 me-3">
+                            {{ order.user.username|first|upper }}
+                        </div>
+                        <div>
+                            <div class="fw-bold text-dark fs-5">{{ order.user.username }}</div>
+                            <div class="text-muted small">{{ order.user.email|default:"No email provided" }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="extra-small text-muted fw-bold d-block mb-1">REGISTRATION DATE</label>
+                        <div class="small text-dark">{{ order.user.date_joined|date:"M d, Y"|default:"Feb 10, 2024" }}</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="extra-small text-muted fw-bold d-block mb-1">LAST INTERACTION</label>
+                        <div class="small text-dark">{{ order.updated_at|date:"M d, Y H:i" }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

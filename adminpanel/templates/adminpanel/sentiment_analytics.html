@@ -1,0 +1,186 @@
+{% extends 'adminpanel/base_admin.html' %}
+{% block content %}
+<style>
+    :root { 
+        --neon-green: #00f2ea; 
+        --neon-red: #ff4d4d; 
+        --neon-yellow: #facc15;
+        --glass: rgba(255, 255, 255, 0.05); 
+        --glass-dark: rgba(0, 0, 0, 0.3);
+        --accent-blue: #38bdf8;
+    }
+
+    .sentiment-card { 
+        background: var(--glass); 
+        backdrop-filter: blur(15px); 
+        border: 1px solid rgba(255,255,255,0.1); 
+        border-radius: 24px; 
+        transition: all 0.3s ease;
+        margin-bottom: 25px;
+    }
+    
+    .sentiment-card:hover {
+        border-color: var(--accent-blue);
+        transform: translateY(-5px);
+    }
+    
+    .radar-box { 
+        width: 80px; height: 80px; 
+        position: relative; border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; 
+        background: var(--glass-dark);
+        border: 2px solid rgba(255,255,255,0.1);
+    }
+    .radar-healthy { border-color: var(--neon-green); box-shadow: 0 0 15px rgba(0, 242, 234, 0.2); }
+    .radar-critical { border-color: var(--neon-red); animation: pulse-red 2s infinite; }
+    
+    @keyframes pulse-red {
+        0% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(255, 77, 77, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(255, 77, 77, 0); }
+    }
+
+    .feedback-stream {
+        background: var(--glass-dark);
+        border-radius: 16px;
+        padding: 15px;
+        height: 300px;
+        overflow-y: auto;
+        margin-top: 20px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    /* Định nghĩa 3 trạng thái màu cho thẻ bình luận */
+    .feedback-item {
+        padding: 12px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        border-left: 4px solid;
+    }
+    .sentiment-positive { 
+        background: rgba(0, 242, 234, 0.05); 
+        border-left-color: var(--neon-green);
+    }
+    .sentiment-neutral { 
+        background: rgba(250, 204, 21, 0.05); 
+        border-left-color: var(--neon-yellow);
+    }
+    .sentiment-negative { 
+        background: rgba(255, 77, 77, 0.05); 
+        border-left-color: var(--neon-red);
+    }
+
+    .progress { background-color: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; overflow: visible; }
+    .progress-bar { border-radius: 10px; position: relative; }
+    
+    /* Glow hiệu ứng cho thanh tiến trình */
+    .bg-info { box-shadow: 0 0 10px rgba(0, 242, 234, 0.5); }
+    .bg-warning { box-shadow: 0 0 10px rgba(250, 204, 21, 0.5); }
+    .bg-danger { box-shadow: 0 0 10px rgba(255, 77, 77, 0.5); }
+
+    .voice-tag { 
+        font-size: 0.65rem; padding: 2px 8px; border-radius: 4px; 
+        margin: 2px; display: inline-block; 
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold m-0 text-white" style="letter-spacing: -1px;">⚡ Sentiment Intelligence</h2>
+            <p class="text-muted small mb-0">Hệ thống phân tích 3 vùng cảm xúc khách hàng.</p>
+        </div>
+        <div class="text-end text-muted small">
+            <i class="bi bi-clock me-1"></i> Cập nhật: {{ now|date:"H:i" }}
+        </div>
+    </div>
+
+    <div class="row">
+        {% for item in data %}
+        <div class="col-xl-6">
+            <div class="sentiment-card p-4">
+                <div class="d-flex align-items-start mb-4">
+                    <div class="radar-box {% if item.health_status == 'critical' %}radar-critical{% elif item.health_status == 'healthy' %}radar-healthy{% endif %}">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" style="width: 70%; height: 70%; object-fit: cover; border-radius: 50%;">
+                        {% endif %}
+                    </div>
+                    <div class="ms-4 flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h4 class="mb-1 fw-bold text-white">{{ item.product.name }}</h4>
+                            <span class="{% if item.trend_value >= 0 %}text-info{% else %}text-danger{% endif %} fw-bold small">
+                                {{ item.trend_value }} pt
+                            </span>
+                        </div>
+                        <p class="small mb-2 {% if item.health_status == 'critical' %}text-danger{% else %}text-info{% endif %} fw-bold">
+                            {{ item.status_label }}
+                        </p>
+                        <div class="voice-cloud">
+                            {% for tag in item.voice_cloud %}
+                            <span class="voice-tag border {% if item.health_status == 'critical' %}border-danger text-danger{% else %}border-info text-info{% endif %}">
+                                #{{ tag }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small class="text-info fw-bold" style="font-size: 0.6rem;">TÍCH CỰC</small>
+                            <small class="text-info" style="font-size: 0.6rem;">{{ item.pos_percent }}%</small>
+                        </div>
+                        <div class="progress"><div class="progress-bar bg-info" style="width: {{ item.pos_percent }}%"></div></div>
+                    </div>
+                    <div class="col-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small class="text-warning fw-bold" style="font-size: 0.6rem;">TRUNG LẬP</small>
+                            <small class="text-warning" style="font-size: 0.6rem;">{{ item.neu_percent }}%</small>
+                        </div>
+                        <div class="progress"><div class="progress-bar bg-warning" style="width: {{ item.neu_percent }}%"></div></div>
+                    </div>
+                    <div class="col-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <small class="text-danger fw-bold" style="font-size: 0.6rem;">TIÊU CỰC</small>
+                            <small class="text-danger" style="font-size: 0.6rem;">{{ item.neg_percent }}%</small>
+                        </div>
+                        <div class="progress"><div class="progress-bar bg-danger" style="width: {{ item.neg_percent }}%"></div></div>
+                    </div>
+                </div>
+
+                <div class="feedback-stream">
+                    <h6 class="text-white-50 small fw-bold mb-3">DÒNG Ý KIẾN THEO SẮC THÁI:</h6>
+                    {% for review in item.recent_reviews %}
+                    <div class="feedback-item 
+                        {% if review.sentiment == 'positive' %}sentiment-positive
+                        {% elif review.sentiment == 'negative' %}sentiment-negative
+                        {% else %}sentiment-neutral{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="fw-bold 
+                                {% if review.sentiment == 'positive' %}text-info
+                                {% elif review.sentiment == 'negative' %}text-danger
+                                {% else %}text-warning{% endif %}" style="font-size: 0.75rem;">
+                                @{{ review.user.username }}
+                            </span>
+                            <span class="text-muted" style="font-size: 0.65rem;">{{ review.created_at|date:"d/m" }}</span>
+                        </div>
+                        <p class="m-0 small text-white-50">{{ review.comment }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-4 pt-3 border-top border-secondary border-opacity-10">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-robot text-info me-3 fs-5"></i>
+                        <p class="mb-0 text-white-50 small fst-italic">"{{ item.reply_suggestion }}"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
