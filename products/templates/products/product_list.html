@@ -75,7 +75,7 @@
                             <input type="range" class="form-range" name="max_price" step="10" min="0" max="10000"
                                 value="{{ request.GET.max_price|default:'10000' }}" onchange="rangePrimary.value=value">
                             <div class="range-inner">
-                                <label>$</label>
+                                <label>₫</label>
                                 <input type="text" id="rangePrimary" name="max_price_display" placeholder="10000" value="{{ request.GET.max_price|default:'10000' }}" readonly />
                             </div>
                             <input type="hidden" name="category" value="{{ category_id }}">
@@ -150,10 +150,10 @@
                                         <div class="product-image">
                                             <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/300x300{% endif %}" alt="{{ product.name }}">
                                             {% if product.discount_percent > 0 %}
-                                            <span class="sale-tag">
-                                           -{{ product.discount_percent }}%
-                                              </span>
-                                                 {% endif %}
+                        <span class="sale-tag">-{{ product.discount_percent }}%</span>
+                        {% elif product.is_new %}
+                        <span class="new-tag">New</span>
+                        {% endif %}
                                             <div class="button">
                                                 <a href="{% url 'products:product_detail' product.pk %}" class="btn"><i
                                                         class="lni lni-cart"></i> Add to Cart</a>
@@ -175,12 +175,12 @@
                                                 <li><span>{{ product.reviews.count|default:0 }} Review(s)</span></li>
                                             </ul>
                                             <div class="price">
-                                                <span>${{ product.price|floatformat:2 }}</span>
-                                                {% if product.discount_percent > 0 %}
-                                                    <span class="discount-price">
-                                                         ${{ product.original_price|floatformat:2 }}
-                                                     </span>
-                                                  {% endif %}
+                                                <span>{{ product.price|floatformat:0 }}₫</span>
+                            {% if product.discount_percent > 0 %}
+                              <span class="discount-price">
+                              {{ product.original_price|floatformat:0 }}₫
+                              </span>
+                               {% endif %}
                                             </div>
                                         </div>
                                     </div>
@@ -222,10 +222,10 @@
                                                 <div class="product-image">
                                                     <img src="{% if product.image %}{{ product.image.url }}{% else %}https://via.placeholder.com/300x300{% endif %}" alt="{{ product.name }}">
                                                     {% if product.discount_percent > 0 %}
-                                                <span class="sale-tag">
-                                               -{{ product.discount_percent }}%
-                                                  </span>
-                                                     {% endif %}
+                                                    <span class="sale-tag">-{{ product.discount_percent }}%</span>
+                                                    {% elif product.is_new %}
+                                                    <span class="new-tag">New</span>
+                                                    {% endif %}
                                                     <div class="button">
                                                         <a href="{% url 'products:product_detail' product.pk %}" class="btn"><i
                                                                 class="lni lni-cart"></i> Add to Cart</a>
@@ -249,10 +249,10 @@
                                                         <li><span>{{ product.reviews.count|default:0 }} Review(s)</span></li>
                                                     </ul>
                                                     <div class="price">
-                                                        <span>${{ product.price|floatformat:2 }}</span>
+                                                        <span>{{ product.price|floatformat:0 }}₫</span>
                                                         {% if product.discount_percent > 0 %}
                                                             <span class="discount-price">
-                                                                 ${{ product.original_price|floatformat:2 }}
+                                                                 {{ product.original_price|floatformat:0 }}₫
                                                              </span>
                                                           {% endif %}
                                                     </div>

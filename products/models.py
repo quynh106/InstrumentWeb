@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-
+from datetime import timedelta
+from django.core.exceptions import ValidationError
 
 
 class Category(models.Model):
@@ -29,6 +30,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    @property
+    def is_new(self):
+        return self.created_at >= timezone.now() - timedelta(days=14)
     
     @property
     def discount_percent(self):
@@ -103,11 +108,13 @@ class FlashSale(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     quantity = models.PositiveIntegerField(default=0)
+    sold = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
 
     def is_running(self):
         now = timezone.now()
-        return self.is_active and self.start_time <= now <= self.end_time
+        return self.is_active and self.start_time <= now <= self.end_time and self.sold < self.quantity
+
 
     def discount_percent(self):
         if self.product.original_price:
@@ -115,6 +122,27 @@ class FlashSale(models.Model):
                 (self.product.original_price - self.flash_price)
                 / self.product.original_price * 100
             )
+
+    def clean(self):
+        if self.start_time >= self.end_time:
+            raise ValidationError("Thời gian không hợp lệ")
+
+        if self.flash_price >= self.product.original_price:
+            raise ValidationError("Giá flash sale phải thấp hơn giá gốc")
+
+        if self.quantity > self.product.stock:
+            raise ValidationError("Số lượng flash sale vượt tồn kho")
+
+        qs = FlashSale.objects.filter(
+            product=self.product,
+            start_time__lt=self.end_time,
+            end_time__gt=self.start_time,
+        )
+        if self.pk:
+            qs = qs.exclude(pk=self.pk)
+
+        if qs.exists():
+            raise ValidationError("Flash sale bị trùng hoặc lồng thời gian")
 
     def __str__(self):
         return f"FlashSale {self.product.name}"

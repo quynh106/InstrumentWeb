@@ -60,10 +60,54 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12 col-12">
-                    <div class="product-info">
+                    <div class="product-info"> 
                         <h2 class="title">{{ product.name }}</h2>
                         <p class="category"><i class="lni lni-tag"></i> Category:<a href="{% url 'products:product_list' %}?category={{ product.category.id }}">{{ product.category.name }}</a></p>
-                        <h3 class="price">${{ product.price|floatformat:2 }}</h3>
+                        <div class="demo-section">
+                            <div class="flash-sale-header" id="live-header">
+                                <div class="flash-sale-title">
+                                    <span class="flash-icon">⚡</span>
+                                    <span class="flash-text">FLASH SALE</span>
+                                </div>
+                                <div class="countdown-section">
+                                    <div class="countdown-label">
+                                        <span class="clock-icon">🕐</span>
+                                        <span>KẾT THÚC TRONG</span>
+                                    </div>
+                                    {% if flash_sale_end %}
+                                    <div class="flash-countdown" data-end="{{ flash_sale_end|date:'U' }}">
+                                        <div class="time-box hours">00</div>
+                                        <div class="time-box minutes">00</div>
+                                        <div class="time-box seconds">00</div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="price">
+                            {% if flash_sale %}
+                                {{ flash_sale.flash_price|floatformat:0 }}₫
+                                <span>{{ product.original_price|floatformat:0 }}₫</span>
+                            {% elif product.discount_percent > 0 %}
+                                {{ product.price|floatformat:0 }}₫
+                            <span>{{ product.original_price|floatformat:0 }}₫</span>
+                            {% else %}
+                                {{ product.price|floatformat:0 }}₫
+                            {% endif %}
+
+
+                    <!-- badge -->
+                            {% if flash_sale %}
+                            <span class="discount-tag">
+                              -{{ flash_sale.discount_percent }}%
+                            </span>
+                            {% elif product.discount_percent > 0 %}
+                                <span class="discount-tag">-{{ product.discount_percent }}%</span>
+                            {% elif product.is_new %}
+                                <span class="discount-tag">New</span>
+                            {% endif %}
+                        </h3>
+                        
                         <p class="info-text">{{ product.description|default:"No description available." }}</p>
                         <div class="row">
                           <div class="col-lg-4 col-md-4 col-12">
@@ -122,23 +166,13 @@
                     </div>
                     <div class="col-lg-6 col-12">
                         <div class="info-body">
-                            <h4>Customer Reviews</h4>
-                            <div class="rating-main">
-                                <ul class="rating">
-                                    {% for i in "12345"|make_list %}
-                                        {% if forloop.counter <= average_rating|default:0 %}
-                                        <li><i class="lni lni-star-filled"></i></li>
-                                        {% else %}
-                                        <li><i class="lni lni-star"></i></li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                                <span class="average">{{ average_rating|floatformat:1 }} out of 5 ({{ total_reviews }} reviews)</span>
-                            </div>
-                            
-                            <a href="{% url 'products:review_product' product.id %}" class="btn mt-3">
-                                <i class="lni lni-star"></i> Write a Review
-                            </a>
+                            <h4>Shipping Options:</h4>
+                            <ul class="normal-list">
+                                <li><span>Courier:</span> 2 - 4 days, 22.500₫</li>
+                                <li><span>Local Shipping:</span> up to one week, 10.000₫</li>
+                                <li><span>UPS Ground Shipping:</span> 4 - 6 days, 18.000₫</li>
+                                <li><span>Unishop Global Export:</span> 3 - 4 days, 25.000₫</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -245,6 +279,11 @@
                 <div class="single-product">
                     <div class="product-image">
                         <img src="{% if p.image %}{{ p.image.url }}{% else %}https://via.placeholder.com/300x300{% endif %}" alt="{{ p.name }}">
+                        {% if p.discount_percent > 0 %}
+                        <span class="sale-tag">-{{ p.discount_percent }}%</span>
+                        {% elif p.is_new %}
+                        <span class="new-tag">New</span>
+                        {% endif %}
                         <div class="button">
                             <a href="{% url 'products:product_detail' p.pk %}" class="btn"><i class="lni lni-cart"></i> View Details</a>
                         </div>
@@ -265,7 +304,12 @@
                             <li><span>{{ p.reviews.count|default:0 }} Review(s)</span></li>
                         </ul>
                         <div class="price">
-                            <span>${{ p.price|floatformat:2 }}</span>
+                            <span>{{ p.price|floatformat:0 }}₫</span>
+                            {% if p.discount_percent > 0 %}
+                              <span class="discount-price">
+                              {{ p.original_price|floatformat:0 }}₫
+                              </span>
+                               {% endif %}
                         </div>
                     </div>
                 </div>
@@ -387,10 +431,7 @@
             return stars;
         }
     });
-</script>
 
-<!-- quantity -->
- <script>
   // Quantity buttons
 function increaseQuantity() {
     const input = document.getElementById('quantity');
@@ -403,5 +444,35 @@ function decreaseQuantity() {
         input.value = parseInt(input.value) - 1;
     }
 }
+
+
+
+/* Flash Sale Countdown */
+document.addEventListener("DOMContentLoaded", function () {
+  const el = document.querySelector(".flash-countdown");
+  if (!el) return;
+
+  const end = parseInt(el.dataset.end) * 1000;
+
+  const tick = () => {
+    const diff = end - Date.now();
+
+    if (diff <= 0) {
+      el.innerText = "⏰ Đã kết thúc";
+      return;
+    }
+
+    const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+    const m = String(Math.floor(diff % 3600000 / 60000)).padStart(2, '0');
+    const s = String(Math.floor(diff % 60000 / 1000)).padStart(2, '0');
+
+    el.querySelector('.hours').textContent = h;
+    el.querySelector('.minutes').textContent = m;
+    el.querySelector('.seconds').textContent = s;
+  };
+
+  tick();
+  setInterval(tick, 1000);
+});
  </script>
 {% endblock %}

@@ -44,7 +44,9 @@ class ReviewAdmin(admin.ModelAdmin):
 class FlashSaleAdmin(admin.ModelAdmin):
     list_display = (
         "product", "flash_price",
-        "start_time", "end_time",
+        "start_time", "end_time","quantity","sold",
         "is_active"
     )
     list_filter = ("is_active",)
+    exclude = ("sold",)
+    list_per_page = 20

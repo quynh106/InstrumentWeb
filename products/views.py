@@ -161,6 +161,19 @@ def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product_images = product.images.all()
 
+    now = timezone.now()
+    flash_sale = (
+        product.flash_sales
+        .filter(
+            is_active=True,
+            start_time__lte=now,
+            end_time__gte=now
+        )
+        .first()
+    )
+
+    flash_sale_end = flash_sale.end_time if flash_sale else None
+
     # Related products - 4 sản phẩm
     related_products = Product.objects.filter(
         category=product.category
@@ -222,6 +235,8 @@ def product_detail(request, pk):
     # ===== NORMAL REQUEST =====
     return render(request, "products/product_detail.html", {
         "product": product,
+        "flash_sale": flash_sale,
+        "flash_sale_end": flash_sale_end,
         "related_products": related_products,
         "reviews": reviews,
         "average_rating": round(average_rating, 1),
