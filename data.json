@@ -1313,6 +1313,97 @@
   }
 },
 {
+  "model": "admin.logentry",
+  "pk": 102,
+  "fields": {
+    "action_time": "2026-01-28T14:03:22.440Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "17",
+    "object_repr": "FlashSale Casio CDP-S100 Digital Piano",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 103,
+  "fields": {
+    "action_time": "2026-01-29T02:18:49.401Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "18",
+    "object_repr": "FlashSale Fender Stratocaster Standard",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 104,
+  "fields": {
+    "action_time": "2026-01-29T02:19:11.260Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "19",
+    "object_repr": "FlashSale Casio CDP-S100 Digital Piano",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 105,
+  "fields": {
+    "action_time": "2026-01-29T02:19:46.332Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "20",
+    "object_repr": "FlashSale Yamaha V3 Student Violin",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 106,
+  "fields": {
+    "action_time": "2026-01-29T02:20:56.301Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "21",
+    "object_repr": "FlashSale Pearl Roadshow Drum Set",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 107,
+  "fields": {
+    "action_time": "2026-01-29T02:21:14.199Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "22",
+    "object_repr": "FlashSale Kala KA-15S Soprano Ukulele",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 108,
+  "fields": {
+    "action_time": "2026-01-29T02:21:27.016Z",
+    "user": 1,
+    "content_type": 22,
+    "object_id": "23",
+    "object_repr": "FlashSale Stentor 1500 Violin",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
@@ -3028,6 +3119,7 @@
     "start_time": "2026-01-26T10:38:55Z",
     "end_time": "2026-01-26T18:00:00Z",
     "quantity": 6,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3040,6 +3132,7 @@
     "start_time": "2026-01-26T10:39:15Z",
     "end_time": "2026-01-26T18:00:00Z",
     "quantity": 8,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3052,6 +3145,7 @@
     "start_time": "2026-01-26T10:39:27Z",
     "end_time": "2026-01-26T18:00:00Z",
     "quantity": 8,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3064,6 +3158,7 @@
     "start_time": "2026-01-26T10:39:39Z",
     "end_time": "2026-01-26T18:00:00Z",
     "quantity": 7,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3076,6 +3171,7 @@
     "start_time": "2026-01-26T10:39:50Z",
     "end_time": "2026-01-26T18:00:00Z",
     "quantity": 9,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3088,6 +3184,7 @@
     "start_time": "2026-01-26T11:05:05Z",
     "end_time": "2026-01-26T19:00:00Z",
     "quantity": 5,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3100,6 +3197,7 @@
     "start_time": "2026-01-27T07:40:44Z",
     "end_time": "2026-01-27T18:00:00Z",
     "quantity": 9,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3112,6 +3210,7 @@
     "start_time": "2026-01-27T07:40:57Z",
     "end_time": "2026-01-27T18:00:00Z",
     "quantity": 7,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3124,6 +3223,7 @@
     "start_time": "2026-01-28T09:00:00Z",
     "end_time": "2026-01-28T18:00:00Z",
     "quantity": 9,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3136,6 +3236,7 @@
     "start_time": "2026-01-28T09:00:00Z",
     "end_time": "2026-01-28T18:00:00Z",
     "quantity": 0,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3148,6 +3249,7 @@
     "start_time": "2026-01-28T09:00:00Z",
     "end_time": "2026-01-28T18:00:00Z",
     "quantity": 9,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3160,6 +3262,7 @@
     "start_time": "2026-01-28T02:32:19Z",
     "end_time": "2026-01-28T18:00:00Z",
     "quantity": 5,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3172,6 +3275,7 @@
     "start_time": "2026-01-28T04:28:34Z",
     "end_time": "2026-01-28T18:00:00Z",
     "quantity": 11,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3184,6 +3288,7 @@
     "start_time": "2026-01-28T04:29:04Z",
     "end_time": "2026-01-28T18:00:00Z",
     "quantity": 12,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3196,6 +3301,7 @@
     "start_time": "2026-01-28T04:29:25Z",
     "end_time": "2026-01-28T18:00:00Z",
     "quantity": 13,
+    "sold": 0,
     "is_active": true
   }
 },
@@ -3208,6 +3314,98 @@
     "start_time": "2026-01-28T04:29:44Z",
     "end_time": "2026-01-28T18:00:00Z",
     "quantity": 15,
+    "sold": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 17,
+  "fields": {
+    "product": 20,
+    "flash_price": "57.00",
+    "start_time": "2026-01-28T14:02:14Z",
+    "end_time": "2026-01-28T14:02:15Z",
+    "quantity": 6,
+    "sold": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 18,
+  "fields": {
+    "product": 16,
+    "flash_price": "600000.00",
+    "start_time": "2026-01-29T02:18:32Z",
+    "end_time": "2026-01-29T11:00:00Z",
+    "quantity": 7,
+    "sold": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 19,
+  "fields": {
+    "product": 20,
+    "flash_price": "86666.00",
+    "start_time": "2026-01-29T02:18:56Z",
+    "end_time": "2026-01-29T11:00:00Z",
+    "quantity": 11,
+    "sold": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 20,
+  "fields": {
+    "product": 22,
+    "flash_price": "46477.00",
+    "start_time": "2026-01-29T02:19:22Z",
+    "end_time": "2026-01-29T11:00:00Z",
+    "quantity": 5,
+    "sold": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 21,
+  "fields": {
+    "product": 27,
+    "flash_price": "86868.00",
+    "start_time": "2026-01-29T02:20:40Z",
+    "end_time": "2026-01-29T11:00:00Z",
+    "quantity": 2,
+    "sold": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 22,
+  "fields": {
+    "product": 28,
+    "flash_price": "57566.00",
+    "start_time": "2026-01-29T02:21:03Z",
+    "end_time": "2026-01-29T11:00:00Z",
+    "quantity": 11,
+    "sold": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "products.flashsale",
+  "pk": 23,
+  "fields": {
+    "product": 23,
+    "flash_price": "67588.00",
+    "start_time": "2026-01-29T02:21:21Z",
+    "end_time": "2026-01-29T11:00:00Z",
+    "quantity": 6,
+    "sold": 0,
     "is_active": true
   }
 }

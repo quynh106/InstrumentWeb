@@ -63,7 +63,7 @@
                     <div class="product-info"> 
                         <h2 class="title">{{ product.name }}</h2>
                         <p class="category"><i class="lni lni-tag"></i> Category:<a href="{% url 'products:product_list' %}?category={{ product.category.id }}">{{ product.category.name }}</a></p>
-                        <div class="demo-section">
+                        {% if flash_sale %}
                             <div class="flash-sale-header" id="live-header">
                                 <div class="flash-sale-title">
                                     <span class="flash-icon">⚡</span>
@@ -83,7 +83,7 @@
                                     {% endif %}
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                         <h3 class="price">
                             {% if flash_sale %}
                                 {{ flash_sale.flash_price|floatformat:0 }}₫

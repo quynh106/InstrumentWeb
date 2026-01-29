@@ -141,7 +141,7 @@
 <!-- End Features Area -->
 
 <!-- Start Flash Sale Area -->
-<section class="flash-sale-section"></section>
+<section class="flash-sale-section">
     <div class="container">
         <!-- Header -->
         <div class="flash-header">
@@ -163,8 +163,11 @@
 
         <!-- Product Grid -->
         <div class="flash-slider">
+            <button class="nav-button prev" id="prevBtn">‹</button>
+            <button class="nav-button next" id="nextBtn">›</button>
+        <div class="flash-track">
             {% for sale in flash_sales %}
-            <a href="{% url 'products:product_detail' sale.product.pk %}" class="flash-product-card">
+           <a href="{% url 'products:product_detail' sale.product.pk %}" class="flash-product-card">
                 
                 <span class="discount-badge">-{{ sale.discount_percent }}%</span>
                 
@@ -207,6 +210,7 @@
                 <p>Hiện chưa có flash sale nào đang diễn ra</p>
             </div>
             {% endfor %}
+        </div>
         </div>
     </div>
 </section>
@@ -693,33 +697,50 @@
 
 
     /* Flash Sale Slider */
-tns({
-    container: '.flash-slider',
-    items: 4,          // Hiển thị 4 sản phẩm
-    slideBy: 3,        //  Trượt mỗi lần 3 sản phẩm
-    autoplay: false,
-    mouseDrag: true,
-    gutter: 15,
-    nav: false,
-    controls: true,
-    controlsText: [
-        '<i class="lni lni-chevron-left"></i>',
-        '<i class="lni lni-chevron-right"></i>'
-    ],
-    responsive: {
-        0: {
-            items: 1,
-            slideBy: 1
-        },
-        576: {
-            items: 2,
-            slideBy: 2
-        },
-        992: {
-            items: 4,
-            slideBy: 3
-        }
+    document.addEventListener("DOMContentLoaded", function () {
+    const track = document.querySelector(".flash-track");
+    const cards = document.querySelectorAll(".flash-product-card");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const visibleItems = 4;   // hiển thị 4
+    const slideStep = 3;      // trượt 3
+    let currentIndex = 0;
+
+    if (!track || cards.length <= visibleItems) {
+        prevBtn.style.display = "none";
+        nextBtn.style.display = "none";
+        return;
     }
+
+    function updateSlider() {
+        const cardWidth = cards[0].offsetWidth;
+        const gap = 16; // phải trùng CSS
+        const translateX = (cardWidth + gap) * currentIndex;
+
+        track.style.transform = `translateX(-${translateX}px)`;
+
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex >= cards.length - visibleItems;
+    }
+
+    nextBtn.addEventListener("click", () => {
+        currentIndex += slideStep;
+        if (currentIndex > cards.length - visibleItems) {
+            currentIndex = cards.length - visibleItems;
+        }
+        updateSlider();
+    });
+
+    prevBtn.addEventListener("click", () => {
+        currentIndex -= slideStep;
+        if (currentIndex < 0) currentIndex = 0;
+        updateSlider();
+    });
+
+    window.addEventListener("resize", updateSlider);
+
+    updateSlider();
 });
 
 /* Flash Sale Countdown */

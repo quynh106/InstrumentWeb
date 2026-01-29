@@ -231,10 +231,10 @@
                                       <a href="{% url 'products:product_list' %}"  aria-label="Toggle navigation">Shop</a>
                                   </li>
                                     <li class="nav-item">
-                                        <a href="#" aria-label="Toggle navigation">About Us</a>
+                                        <a href="{% url 'about' %}" aria-label="Toggle navigation">About Us</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" aria-label="Toggle navigation">Contact Us</a>
+                                        <a href="{% url 'contact' %}" aria-label="Toggle navigation">Contact Us</a>
                                     </li>
                                 </ul>
                             </div> <!-- navbar collapse -->
@@ -420,6 +420,25 @@
     <script src="{% static 'js/glightbox.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     
+    <script>
+       // Active navbar item based on current URL
+    const navLinks = document.querySelectorAll('#nav .nav-item a');
+    const currentPath = window.location.pathname;
+    
+    navLinks.forEach(link => {
+        // Xóa active ở tất cả
+        link.classList.remove('active');
+        
+        // Check nếu href của link khớp với URL hiện tại
+        const linkPath = new URL(link.href).pathname;
+        if (linkPath === currentPath) {
+            link.classList.add('active');
+        }
+    });
+    
+    
+    </script>
+
     {% block extra_js %}{% endblock %}
 </body>
 

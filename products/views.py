@@ -309,3 +309,5 @@ def review_product(request, product_id):
         'categories': Category.objects.all(),
         'brands': Brand.objects.all().all(),
     })
+
+
